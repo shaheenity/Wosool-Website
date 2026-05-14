@@ -1,0 +1,130 @@
+const translations = {
+    ar: {
+        "nav_home": "الرئيسية",
+        "nav_schools": "وصول الجاهزية",
+        "nav_map": "الخريطة",
+        "nav_about": "عن المنصة",
+        "nav_btec": "مدارس BTEC",
+        "nav_contact": "تواصل معنا",
+        "nav_fav": "المفضلة",
+        "nav_login": "تسجيل الدخول",
+        "brand_name": "وصول",
+
+        "home_title": "منصة وصول جاهزية مدارس العقبة لذوي الإعاقة",
+        "cat_ramps": "مداخل ومنحدرات",
+        "cat_elevators": "مصاعد",
+        "cat_restrooms": "دورات مياه",
+        "cat_tools": "وسائل تعليمية",
+        "cat_parking": "مواقف مهيأة",
+        "cat_more": "المزيد",
+
+        "map_title": "خريطة المدارس",
+        "nearby_title": "المدارس القريبة منك",
+
+        "stat_total": "عدد المدارس",
+        "stat_ready": "مدارس مهيأة",
+        "stat_mid": "متوسطة الجاهزية",
+        "stat_undeveloped": "قيد التطوير",
+
+        "settings_title": "⚙️ إعدادات المنصة",
+        "setting_dark": "الوضع الليلي",
+        "setting_font": "حجم الخط",
+        "setting_contrast": "التباين العالي",
+        "setting_voice": "القارئ الصوتي التفاعلي",
+        "btn_save_close": "حفظ وإغلاق",
+
+        "search_ph": "ابحث عن مدرسة...",
+        "reg_title": "تسجيل حساب جديد",
+        "reg_name": "الاسم الشخصي",
+        "reg_name_ph": "أدخل اسمك الكريم",
+        "reg_email": "البريد الإلكتروني",
+        "reg_pass": "كلمة المرور",
+        "reg_img": "الصورة الشخصية (اختياري)",
+        "reg_img_btn": "اختر صورة من جهازك",
+        "reg_next_txt": "إنشاء الحساب ومتابعة",
+        "reg_success": "تم التسجيل بنجاح! نود أن نتعرف عليك أكثر. اختر رمزك التعسيري وخلفيتك المفضلة لتجميل ملفك.",
+        "reg_avatars": "أيقونات الأفاتار:",
+        "reg_bg": "خلفيات الملف:",
+        "reg_skip": "تخطي للآن",
+        "reg_save_txt": "حفظ التطبيقات",
+
+        "btn_enable": "تفعيل",
+        "btn_disable": "إيقاف",
+
+        // Data bindings
+        "status_ready": "مهيأة",
+        "status_mid": "متوسطة الجاهزية",
+        "status_low": "غير مهيأة",
+        "status_partial": "جزئي",
+        "btn_details": "التفاصيل",
+
+        "filter_schools": "تصفية المدارس",
+        "all_schools": "جميع المدارس",
+        "about_desc": "منصة تجريبية لعرض بيانات الوصول الشامل للمرافق التعليمية في مدينة العقبة.",
+        "contact_desc": "صفحة المراسلات وبوابة العناية بالمستفيدين يتم بناؤها الآن لتوفير أسرع تجربة اتصال."
+    },
+    en: {
+        "nav_home": "Home",
+        "nav_schools": "Educational Wusool",
+        "nav_map": "Map",
+        "nav_about": "About Us",
+        "nav_contact": "Contact",
+        "nav_btec": "BTEC Schools",
+        "nav_fav": "Favorites",
+        "nav_login": "Login",
+        "brand_name": "Wusool",
+
+        "home_title": "Wusool: Aqaba Schools Accessibility",
+        "cat_ramps": "Ramps & Entrances",
+        "cat_elevators": "Elevators",
+        "cat_restrooms": "Restrooms",
+        "cat_tools": "Educational Tools",
+        "cat_parking": "Accessible Parking",
+        "cat_more": "More",
+
+        "map_title": "Schools Map",
+        "nearby_title": "Nearby Schools",
+
+        "stat_total": "Total Schools",
+        "stat_ready": "Fully Accessible",
+        "stat_mid": "Partially Ready",
+        "stat_undeveloped": "Under Development",
+
+        "settings_title": "⚙️ Settings",
+        "setting_dark": "Dark Mode",
+        "setting_font": "Font Size",
+        "setting_contrast": "High Contrast",
+        "setting_voice": "Interactive Voice",
+        "btn_save_close": "Save & Close",
+
+        "search_ph": "Search for a school...",
+        "reg_title": "Create New Account",
+        "reg_name": "Full Name",
+        "reg_name_ph": "Enter your full name",
+        "reg_email": "Email Address",
+        "reg_pass": "Password",
+        "reg_img": "Profile Image (Optional)",
+        "reg_img_btn": "Choose image from device",
+        "reg_next_txt": "Create Account & Continue",
+        "reg_success": "Registered successfully! Let's get to know you better. Choose an avatar and profile background.",
+        "reg_avatars": "Avatars:",
+        "reg_bg": "Backgrounds:",
+        "reg_skip": "Skip",
+        "reg_save_txt": "Save Profile",
+
+        "btn_enable": "Enable",
+        "btn_disable": "Disable",
+
+        // Data bindings
+        "status_ready": "Accessible",
+        "status_mid": "Medium Readiness",
+        "status_low": "Unaccessible",
+        "status_partial": "Partial",
+        "btn_details": "Details",
+
+        "filter_schools": "Filter Schools",
+        "all_schools": "All Schools",
+        "about_desc": "An experimental platform to display comprehensive accessibility data for educational facilities in Aqaba City.",
+        "contact_desc": "The correspondence page and beneficiary care portal are currently being built to provide an optimal experience."
+    }
+};
