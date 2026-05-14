@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تواصل معنا - وصول</title>
+
+    <!-- Premium Typefaces: IBM Plex Sans Arabic -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Kufam:wght@600;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'IBM Plex Sans Arabic', sans-serif !important;
+            cursor: none;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+        }
+
+        .kufi-font {
+            font-family: 'Kufam', sans-serif;
+        }
+
+        a,
+        button,
+        input,
+        textarea {
+            cursor: none !important;
+        }
+
+        /* Liquid Cursor */
+        .liquid-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 22px;
+            height: 22px;
+            background: rgba(0, 86, 179, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 99999;
+            box-shadow: 0 0 20px rgba(0, 86, 179, 0.6), inset 0 0 8px rgba(255, 255, 255, 0.8);
+            transition: width 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), height 0.3s ease, background 0.3s ease;
+        }
+
+        .liquid-cursor.grow {
+            width: 60px;
+            height: 60px;
+            background: rgba(243, 156, 18, 0.25);
+            box-shadow: 0 0 35px rgba(243, 156, 18, 0.5);
+        }
+
+        /* Animated Mesh Gradient (same brand system as about.html) */
+        .mesh-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background-image:
+                radial-gradient(at 0% 20%, rgba(0, 86, 179, 0.12) 0px, transparent 55%),
+                radial-gradient(at 80% 0%, rgba(255, 255, 255, 0.9) 0px, transparent 50%),
+                radial-gradient(at 100% 80%, rgba(0, 86, 179, 0.08) 0px, transparent 50%),
+                radial-gradient(at 20% 100%, rgba(255, 255, 255, 0.95) 0px, transparent 50%);
+            background-color: #f8fafc;
+            animation: meshMove 22s ease-in-out infinite alternate;
+        }
+
+        @keyframes meshMove {
+            0% {
+                transform: scale(1) translate(0, 0);
+            }
+
+            50% {
+                transform: scale(1.15) translate(-1.5%, 2%);
+            }
+
+            100% {
+                transform: scale(1) translate(2%, -1.5%);
+            }
+        }
+
+        /* Bounce Reveal */
+        .bounce-reveal {
+            opacity: 0;
+            transform: translateY(70px);
+            transition: opacity 0.9s, transform 1.2s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+        }
+
+        .bounce-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ======== PAGE HEADER HERO ======== */
+        .contact-hero {
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border: 1px solid rgba(255, 255, 255, 0.85);
+            border-radius: 40px;
+            padding: 55px 40px;
+            margin: 45px auto 55px;
+            max-width: 880px;
+            text-align: center;
+            box-shadow: 0 25px 55px rgba(0, 86, 179, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 86, 179, 0.08);
+            border: 1px solid rgba(0, 86, 179, 0.15);
+            border-radius: 50px;
+            padding: 8px 20px;
+            margin-bottom: 22px;
+            font-size: 14px;
+            color: #0056b3;
+            font-weight: 600;
+        }
+
+        .hero-badge i {
+            font-size: 16px;
+            color: #f39c12;
+        }
+
+        .contact-hero h1 {
+            font-size: 40px;
+            font-weight: 800;
+            color: #1a2942;
+            margin: 0 0 18px 0;
+            letter-spacing: -1.5px;
+        }
+
+        .contact-hero p {
+            font-size: 18px;
+            color: #64748b;
+            line-height: 2;
+            max-width: 650px;
+            margin: 0 auto 30px;
+        }
+
+        /* Info Chips */
+        .info-chips {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .info-chip {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: white;
+            border: 1px solid rgba(0, 86, 179, 0.1);
+            border-radius: 50px;
+            padding: 10px 22px;
+            font-size: 15px;
+            color: #1a2942;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            transition: all 0.3s ease;
+        }
+
+        .info-chip:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 86, 179, 0.1);
+            border-color: #0056b3;
+        }
+
+        .info-chip i {
+            color: #0056b3;
+            font-size: 18px;
+        }
+
+        /* ======== SECTION HEADINGS ======== */
+        .section-headline {
+            text-align: center;
+            margin: 70px 0 40px;
+            color: #1a2942;
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .section-headline span {
+            color: #0056b3;
+        }
+
+        /* ======== CONTACT FORM CARD ======== */
+        .contact-form-wrap {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.85);
+            border-radius: 40px;
+            padding: 55px 50px;
+            max-width: 760px;
+            margin: 0 auto 80px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 640px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 22px;
+        }
+
+        .form-field label {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1a2942;
+        }
+
+        .form-field input,
+        .form-field textarea {
+            background: rgba(248, 250, 252, 0.9);
+            border: 1.5px solid rgba(0, 86, 179, 0.12);
+            border-radius: 18px;
+            padding: 14px 18px;
+            font-size: 16px;
+            color: #1a2942;
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            outline: none;
+            resize: vertical;
+        }
+
+        .form-field input:focus,
+        .form-field textarea:focus {
+            border-color: #0056b3;
+            box-shadow: 0 0 0 4px rgba(0, 86, 179, 0.08);
+            background: white;
+        }
+
+        .form-field textarea {
+            min-height: 140px;
+        }
+
+        .btn-send {
+            width: 100%;
+            padding: 18px;
+            border-radius: 22px;
+            border: none;
+            background: linear-gradient(135deg, #0056b3 0%, #1a2942 100%);
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            box-shadow: 0 10px 25px rgba(0, 86, 179, 0.3);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .btn-send:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 18px 35px rgba(0, 86, 179, 0.4);
+            background: linear-gradient(135deg, #004494 0%, #111e30 100%);
+        }
+
+        /* ======== TECH SUPPORT FLIP GRID ======== */
+        .support-flip-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 28px;
+            margin-bottom: 90px;
+        }
+
+        @media (max-width: 1100px) {
+            .support-flip-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 580px) {
+            .support-flip-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .flip-card {
+            background: transparent;
+            height: 320px;
+            perspective: 1200px;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s cubic-bezier(0.68, -0.3, 0.265, 1.35);
+            transform-style: preserve-3d;
+            border-radius: 32px;
+            box-shadow: 0 18px 40px rgba(0, 86, 179, 0.07);
+        }
+
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front,
+        .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 32px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+        }
+
+        .flip-card-front {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.85);
+        }
+
+        .flip-avatar {
+            width: 95px;
+            height: 95px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 18px;
+            border: 4px solid white;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .flip-name {
+            font-size: 19px;
+            color: #1a2942;
+            margin: 0 0 6px 0;
+        }
+
+        .flip-role {
+            color: #0056b3;
+            font-size: 14px;
+            font-weight: 600;
+            margin: 0;
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+        }
+
+        .flip-card-back {
+            background: linear-gradient(145deg, #0056b3 0%, #1a2942 100%);
+            color: white;
+            transform: rotateY(180deg);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .back-icon {
+            font-size: 38px;
+            color: #f39c12;
+            margin-bottom: 18px;
+        }
+
+        .back-name {
+            font-size: 20px;
+            font-weight: 700;
+            margin: 0 0 20px 0;
+        }
+
+        .quick-call-btn {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            padding: 11px 22px;
+            border-radius: 18px;
+            text-decoration: none;
+            font-weight: 700;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .quick-call-btn:hover {
+            background: white;
+            color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        .wa-pill {
+            margin-top: 15px;
+            background: #25D366;
+            color: white;
+            padding: 9px 18px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            transition: all 0.3s;
+        }
+
+        .wa-pill:hover {
+            background: #128C7E;
+            transform: scale(1.05);
+        }
+    </style>
+    <script src="assets/js/audio.js"></script>
+</head>
+
+<body>
+    <!-- Mesh Background -->
+    <div class="mesh-bg"></div>
+    <!-- Liquid Cursor -->
+    <div class="liquid-cursor" id="liquidCursor"></div>
+
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <div class="sidebar-item" style="margin-bottom: 30px;"><i class="fa-solid fa-bars"></i></div>
+        <div class="sidebar-item" onclick="window.location.href='index.html'"><i class="fa-solid fa-house"></i><span
+                data-i18n="nav_home">الرئيسية</span></div>
+        <div class="sidebar-item" onclick="window.location.href='schools.html'"><i class="fa-solid fa-school"></i><span
+                data-i18n="nav_schools">وصول الجاهزية</span></div>
+        <div class="sidebar-item" onclick="window.location.href='educational-access.html'"><i
+                class="fa-solid fa-book-open-reader"></i><span>وصول التعليمية</span></div>
+        <div class="sidebar-item" onclick="window.location.href='map.html'"><i
+                class="fa-solid fa-map-location-dot"></i><span data-i18n="nav_map">الخريطة</span></div>
+        <div class="sidebar-item fav-item" onclick="window.location.href='favorites.html'"><i
+                class="fa-solid fa-star"></i><span data-i18n="nav_fav">المفضلة</span></div>
+        <div class="sidebar-item" onclick="window.location.href='about.html'"><i
+                class="fa-solid fa-circle-info"></i><span data-i18n="nav_about">عن المنصة</span></div>
+        <div class="sidebar-item active" onclick="window.location.href='contact.html'"><i
+                class="fa-solid fa-envelope"></i><span data-i18n="nav_contact">تواصل معنا</span></div>
+    </nav>
+
+    <div class="main-container">
+        <!-- الشريط العلوي الاحترافي (Top Navbar) -->
+        <div class="top-navbar">
+            <div class="nav-right" onclick="window.location.href='index.html'" style="cursor: pointer;">
+                <img src="assets/img/wusool_logo.png" alt="وصول" class="nav-brand-logo"
+                    onerror="this.src='assets/img/logo.png'">
+                <span class="nav-brand-text" data-i18n="brand_name">وصول</span>
+            </div>
+
+            <div class="nav-links">
+                <a href="index.html" class="nav-link" data-i18n="nav_home">الرئيسية</a>
+                <a href="schools.html" class="nav-link" data-i18n="nav_schools">وصول الجاهزية</a>
+                <a href="map.html" class="nav-link" data-i18n="nav_map">الخريطة</a>
+                <a href="educational-access.html" class="nav-link nav-link-access">
+                    <i class="fa-solid fa-book-open-reader" style="margin-left:5px;"></i>وصول التعليمية
+                </a>
+                <a href="favorites.html" class="nav-link" data-i18n="nav_fav">المفضلة</a>
+                <a href="about.html" class="nav-link" data-i18n="nav_about">عن المنصة</a>
+                <a href="contact.html" class="nav-link active" data-i18n="nav_contact">تواصل معنا</a>
+            </div>
+
+            <div class="nav-left" id="openRegisterBtn" tabindex="0">
+                <span class="login-text" data-i18n="nav_login">تسجيل الدخول</span>
+                <div class="user-icon"><i class="fa-solid fa-circle-user"></i></div>
+            </div>
+        </div>
+
+        <!-- Hero Section -->
+        <div class="contact-hero bounce-reveal">
+            <div class="hero-badge">
+                <i class="fa-solid fa-headset"></i>
+                <span>نحن هنا من أجلك دائماً</span>
+            </div>
+            <h1 class="kufi-font">تواصل معنا</h1>
+            <p>فريق دعم منصة "وصول" جاهز الإجابة على استفساراتك وضمان أفضل تجربة تصفح. سواء كنت تواجه مشكلة تقنية أو
+                تريد اقتراح تحسين، تواصل معنا بكل ارتياح.</p>
+            <div class="info-chips">
+                <div class="info-chip">
+                    <i class="fa-solid fa-envelope"></i>
+                    <span>support@wosool-aqaba.jo</span>
+                </div>
+                <div class="info-chip">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <span>العقبة، المملكة الأردنية الهاشمية</span>
+                </div>
+                <div class="info-chip">
+                    <i class="fa-solid fa-clock"></i>
+                    <span>متاحون من 8ص حتى 8م</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Form -->
+        <h2 class="section-headline bounce-reveal kufi-font">أرسل لنا <span>رسالة</span></h2>
+        <div class="contact-form-wrap bounce-reveal">
+            <div class="form-row">
+                <div class="form-field">
+                    <label><i class="fa-solid fa-circle-user" style="margin-left:6px; color:#0056b3;"></i>الاسم
+                        الكامل</label>
+                    <input type="text" id="nameInput" placeholder="أدخل اسمك الكريم" />
+                </div>
+                <div class="form-field">
+                    <label><i class="fa-solid fa-envelope" style="margin-left:6px; color:#0056b3;"></i>البريد
+                        الإلكتروني</label>
+                    <input type="email" id="emailInput" placeholder="example@mail.com"
+                        style="direction:ltr; text-align:right;" />
+                </div>
+            </div>
+            <div class="form-field">
+                <label><i class="fa-solid fa-tag" style="margin-left:6px; color:#0056b3;"></i>موضوع الرسالة</label>
+                <input type="text" id="subjectInput" placeholder="عن ماذا تريد التحدث؟" />
+            </div>
+            <div class="form-field">
+                <label><i class="fa-solid fa-pen-to-square" style="margin-left:6px; color:#0056b3;"></i>الرسالة</label>
+                <textarea id="msgInput" placeholder="اكتب رسالتك هنا، وسيرد عليك الفريق في أقرب وقت..."></textarea>
+            </div>
+            <button class="btn-send" id="sendBtn">
+                <i class="fa-solid fa-paper-plane"></i>
+                إرسال الرسالة
+            </button>
+        </div>
+
+
+    </div>
+
+    <!-- Registration Modal -->
+    <div class="modal-overlay" id="registerModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">تسجيل حساب جديد</h3>
+                <i class="fa-solid fa-xmark modal-close" id="closeModalBtn"></i>
+            </div>
+            <div class="modal-step active" id="step1">
+                <div class="input-group"><label>الاسم الشخصي</label><input type="text" placeholder="أدخل اسمك الكريم"
+                        class="form-input" id="userNameInput"></div>
+                <div class="input-group"><label>البريد الإلكتروني</label><input type="email"
+                        placeholder="example@email.com" class="form-input" style="text-align:left;direction:ltr;"></div>
+                <div class="input-group"><label>كلمة المرور</label><input type="password" placeholder="********"
+                        class="form-input" style="text-align:left;direction:ltr;"></div>
+                <button class="btn-primary" id="btnNextStep">إنشاء الحساب ومتابعة <i class="fa-solid fa-arrow-left"
+                        style="margin-right:8px;"></i></button>
+            </div>
+            <div class="modal-step" id="step2">
+                <div style="display:flex;gap:12px;margin-top:30px;">
+                    <button class="btn-secondary" id="btnSkip" style="flex:1;">تخطي للآن</button>
+                    <button class="btn-primary" id="btnSave" style="flex:1;margin-top:0;">حفظ التطبيقات <i
+                            class="fa-solid fa-check" style="margin-right:5px;"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/i18n.js"></script>
+    <script src="assets/js/data.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            /* Liquid Cursor */
+            const cursor = document.getElementById('liquidCursor');
+            let mX = window.innerWidth / 2, mY = window.innerHeight / 2;
+            let cX = mX, cY = mY;
+            document.addEventListener('mousemove', e => { mX = e.clientX; mY = e.clientY; });
+            (function animCursor() {
+                cX += (mX - cX) * 0.15; cY += (mY - cY) * 0.15;
+                cursor.style.transform = `translate(${cX}px, ${cY}px)`;
+                requestAnimationFrame(animCursor);
+            })();
+            document.querySelectorAll('a, button, .flip-card, .info-chip, input, textarea, .sidebar-item').forEach(el => {
+                el.addEventListener('mouseenter', () => cursor.classList.add('grow'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('grow'));
+            });
+
+            /* Scroll Bounce Reveal */
+            const ob = new IntersectionObserver((entries, ob) => {
+                entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); ob.unobserve(e.target); } });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.bounce-reveal').forEach(el => ob.observe(el));
+
+            /* Send Button Toast */
+            document.getElementById('sendBtn').addEventListener('click', () => {
+                const name = document.getElementById('nameInput').value.trim();
+                if (!name) { showToast('الرجاء إدخال اسمك الكريم قبل الإرسال.'); return; }
+                document.getElementById('sendBtn').innerHTML = '<i class="fa-solid fa-check-circle"></i> تم الإرسال! شكراً لك.';
+                document.getElementById('sendBtn').style.background = 'linear-gradient(135deg, #25D366 0%, #128C7E 100%)';
+                setTimeout(() => {
+                    document.getElementById('sendBtn').innerHTML = '<i class="fa-solid fa-paper-plane"></i> إرسال رسالة أخرى';
+                    document.getElementById('sendBtn').style.background = '';
+                }, 4000);
+            });
+        });
+    </script>
+</body>
+
+</html>

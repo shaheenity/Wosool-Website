@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - منصة وصول</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0f172a 0%, #1a2942 100%);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animated background elements */
+        .bg-shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: float 12s infinite alternate ease-in-out;
+            z-index: 1;
+        }
+        .shape1 {
+            width: 500px;
+            height: 500px;
+            background: #1abc9c;
+            top: -150px;
+            right: -150px;
+        }
+        .shape2 {
+            width: 400px;
+            height: 400px;
+            background: #3e9e9a;
+            bottom: -100px;
+            left: -100px;
+            animation-delay: -5s;
+        }
+        .shape3 {
+            width: 300px;
+            height: 300px;
+            background: #25706c;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulseBg 8s infinite alternate;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(50px, 80px) scale(1.1); }
+        }
+
+        @keyframes pulseBg {
+            0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.2; }
+            100% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.5; }
+        }
+
+        /* Glassmorphism Login Container */
+        .login-container {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 30px;
+            padding: 50px 40px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            z-index: 10;
+            transform: translateY(30px);
+            opacity: 0;
+            animation: slideUpFade 1s forwards cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideUpFade {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .logo-area {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo-img {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+            background: white;
+            padding: 5px;
+            box-shadow: 0 0 25px rgba(26, 188, 156, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            animation: pulseGlow 3s infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            from { box-shadow: 0 0 15px rgba(26, 188, 156, 0.3); transform: scale(1); }
+            to { box-shadow: 0 0 35px rgba(26, 188, 156, 0.7); transform: scale(1.02); }
+        }
+
+        .logo-area h1 {
+            color: #ffffff;
+            font-size: 26px;
+            margin: 0 0 10px 0;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
+
+        .logo-area p {
+            color: #cbd5e1;
+            margin: 0;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .input-group i {
+            position: absolute;
+            right: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 18px;
+            transition: 0.3s;
+        }
+
+        .input-field {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            padding: 16px 45px 16px 15px;
+            color: #ffffff;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .input-field::placeholder {
+            color: #94a3b8;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #1abc9c;
+            background: rgba(0, 0, 0, 0.4);
+            box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.15);
+        }
+
+        .input-field:focus + i, .input-field:not(:placeholder-shown) + i {
+            color: #1abc9c;
+        }
+
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #1abc9c 0%, #16a085 100%);
+            color: #ffffff;
+            border: none;
+            border-radius: 16px;
+            padding: 18px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 10px 25px rgba(26, 188, 156, 0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            font-family: inherit;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transform: skewX(-20deg);
+            animation: btnFlare 4s infinite ease-in-out;
+        }
+
+        @keyframes btnFlare {
+            0% { left: -100%; }
+            20% { left: 200%; }
+            100% { left: 200%; }
+        }
+
+        .login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(26, 188, 156, 0.5);
+        }
+
+        .login-btn:active {
+            transform: translateY(1px);
+        }
+
+        .action-link {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        .action-link:hover {
+            color: #1abc9c;
+        }
+        
+        .form-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+            align-items: center;
+        }
+        
+        .loader {
+            display: none;
+            width: 22px;
+            height: 22px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-shape shape1"></div>
+    <div class="bg-shape shape2"></div>
+    <div class="bg-shape shape3"></div>
+
+    <div class="login-container">
+        <div class="logo-area">
+            <img src="assets/img/wusool_logo.png" alt="وصول" class="logo-img" onerror="this.src='assets/img/logo.png'">
+            <h1 id="pageTitle">مرحباً بك في وصول</h1>
+            <p id="pageDesc">منصة جاهزية مدارس العقبة لذوي الإعاقة</p>
+        </div>
+
+        <form id="loginForm">
+            <div class="input-group" id="nameGroup" style="display: none; opacity: 0; transition: opacity 0.4s ease;">
+                <input type="text" class="input-field" id="nameInput" placeholder="الاسم الشخصي">
+                <i class="fa-solid fa-id-badge"></i>
+            </div>
+
+            <div class="input-group">
+                <input type="text" class="input-field" id="emailInput" placeholder="اسم المستخدم أو البريد الإلكتروني" required>
+                <i class="fa-solid fa-user"></i>
+            </div>
+            
+            <div class="input-group">
+                <input type="password" class="input-field" placeholder="كلمة المرور" required>
+                <i class="fa-solid fa-lock"></i>
+            </div>
+
+            <button type="submit" class="login-btn" id="loginBtn">
+                <span id="btnText">دخول للمنصة</span>
+                <i class="fa-solid fa-arrow-left" id="btnIcon" style="margin-right: 8px;"></i>
+                <div class="loader" id="btnLoader"></div>
+            </button>
+            
+            <div class="form-footer">
+                <a class="action-link" id="forgotPassLink">هل نسيت كلمة المرور؟</a>
+                <a class="action-link" id="toggleModeLink" style="font-weight: bold; color: #1abc9c;">إنشاء حساب جديد</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        let isLoginMode = true;
+        
+        document.getElementById('toggleModeLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            isLoginMode = !isLoginMode;
+            
+            const nameGroup = document.getElementById('nameGroup');
+            const nameInput = document.getElementById('nameInput');
+            const pageTitle = document.getElementById('pageTitle');
+            const pageDesc = document.getElementById('pageDesc');
+            const btnText = document.getElementById('btnText');
+            const toggleModeLink = document.getElementById('toggleModeLink');
+            const forgotPassLink = document.getElementById('forgotPassLink');
+            
+            if (isLoginMode) {
+                nameGroup.style.opacity = '0';
+                setTimeout(() => { nameGroup.style.display = 'none'; }, 300);
+                nameInput.removeAttribute('required');
+                pageTitle.textContent = 'مرحباً بك في وصول';
+                pageDesc.textContent = 'منصة جاهزية مدارس العقبة لذوي الإعاقة';
+                btnText.textContent = 'دخول للمنصة';
+                toggleModeLink.textContent = 'إنشاء حساب جديد';
+                forgotPassLink.style.display = 'block';
+            } else {
+                nameGroup.style.display = 'block';
+                setTimeout(() => { nameGroup.style.opacity = '1'; }, 10);
+                nameInput.setAttribute('required', 'true');
+                pageTitle.textContent = 'إنشاء حساب جديد';
+                pageDesc.textContent = 'أدخل بياناتك للانضمام إلى منصة وصول';
+                btnText.textContent = 'إنشاء حساب والدخول';
+                toggleModeLink.textContent = 'لدي حساب بالفعل (تسجيل الدخول)';
+                forgotPassLink.style.display = 'none';
+            }
+        });
+
+        // Prevent numbers in Name Input
+        document.getElementById('nameInput').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[0-9]/g, '');
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const nameInput = document.getElementById('nameInput');
+            const emailInput = document.getElementById('emailInput');
+            const passInput = document.querySelector('input[type="password"]');
+            
+            // --- VALIDATION RULES ---
+            
+            // 1. Name Validation (Only when creating account)
+            if (!isLoginMode) {
+                const nameValue = nameInput.value.trim();
+                const nameRegex = /^[A-Z][a-zA-Z\s]*$/;
+                
+                if (!nameRegex.test(nameValue)) {
+                    alert("يجب أن يبدأ الاسم بحرف كبير، وباللغة الإنجليزية فقط وبدون أرقام.");
+                    return;
+                }
+            }
+            
+            // 2. Password Validation
+            const passValue = passInput.value;
+            const passHasNumber = /\d/.test(passValue);
+            
+            if (passValue.length < 8) {
+                alert("يجب أن تكون كلمة المرور 8 أحرف على الأقل.");
+                return;
+            }
+            
+            if (!passHasNumber) {
+                alert("يجب أن تحتوي كلمة المرور على أرقام.");
+                return;
+            }
+            
+            // ------------------------
+
+            const btnText = document.getElementById('btnText');
+            const btnIcon = document.getElementById('btnIcon');
+            const btnLoader = document.getElementById('btnLoader');
+            const loginBtn = document.getElementById('loginBtn');
+            
+            btnText.style.display = 'none';
+            btnIcon.style.display = 'none';
+            btnLoader.style.display = 'block';
+            loginBtn.style.opacity = '0.9';
+            loginBtn.style.cursor = 'wait';
+            
+            // Set login state and redirect
+            setTimeout(() => {
+                localStorage.setItem('wusool_logged_in', 'true');
+                
+                let displayName = "";
+                if (!isLoginMode && nameInput.value.trim() !== '') {
+                    displayName = nameInput.value.trim();
+                } else {
+                    const emailValue = document.getElementById('emailInput').value.trim();
+                    displayName = emailValue.split('@')[0]; // Use username part of email
+                }
+                
+                // Clean displayName from any numbers as requested
+                displayName = displayName.replace(/[0-9]/g, '');
+                
+                // Fallback if the name becomes empty (e.g. only numbers were provided)
+                if (!displayName.trim()) {
+                    displayName = "مستخدم وصول";
+                }
+                
+                if (displayName) {
+                    localStorage.setItem('wusool_user_name', displayName);
+                }
+                
+                window.location.href = 'index.html';
+            }, 1200);
+        });
+    </script>
+</body>
+</html>

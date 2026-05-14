@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="nav_schools">المدارس - وصول</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --secondary: var(--text-main);
+            --bg-page: var(--primary-bg);
+            --text-sub: var(--text-muted);
+            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            background-color: var(--bg-page);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-main);
+        }
+
+        .main-container {
+            margin-right: 100px;
+            background-color: var(--bg-page);
+            min-height: 100vh;
+            padding-bottom: 60px;
+        }
+
+        /* Selection Interface Styles */
+        .selection-wrapper {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .selection-header {
+            margin-bottom: 50px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .selection-title {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--secondary);
+            margin-bottom: 15px;
+        }
+
+        .selection-subtitle {
+            color: var(--text-sub);
+            font-size: 16px;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .choice-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 50px 30px;
+            border: 2px solid var(--border-color);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+        }
+
+        .choice-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary), #7c3aed);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: 0;
+        }
+
+        .choice-card:hover {
+            transform: translateY(-10px);
+            border-color: transparent;
+            box-shadow: 0 20px 40px -10px rgba(79, 70, 229, 0.2);
+        }
+
+        .choice-card:hover::before {
+            opacity: 1;
+        }
+
+        .choice-card * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .choice-card:hover * {
+            color: white !important;
+        }
+
+        .choice-icon {
+            font-size: 60px;
+            margin-bottom: 10px;
+            transition: var(--transition);
+        }
+
+        .choice-label {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--secondary);
+        }
+
+        .choice-desc {
+            color: var(--text-sub);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* View Containers */
+        .view-section {
+            display: none;
+            animation: slideUp 0.6s ease;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        /* Navigation Breadcrumbs */
+        .breadcrumb-nav {
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: var(--text-sub);
+        }
+
+        .breadcrumb-item {
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .breadcrumb-item:hover {
+            color: var(--primary);
+        }
+
+        .breadcrumb-sep {
+            font-size: 10px;
+        }
+
+        /* Academic / BTEC Content Styles */
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .back-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 10px 20px;
+            border-radius: 12px;
+            color: var(--secondary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-btn:hover {
+            background: #e2e8f0;
+        }
+
+        /* Tabbed Interface for BTEC */
+        .tab-nav {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 35px;
+            background: var(--primary-bg);
+            padding: 8px;
+            border-radius: 18px;
+            width: fit-content;
+        }
+
+        .tab-btn {
+            padding: 12px 25px;
+            border-radius: 14px;
+            border: none;
+            background: transparent;
+            color: var(--text-sub);
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tab-btn.active {
+            background: var(--card-bg);
+            color: var(--primary);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Reusing common grid styles */
+        .schools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+            gap: 30px;
+        }
+
+        .filters-bar {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .search-box {
+            flex: 1;
+            background: var(--primary-bg);
+            border-radius: 12px;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            width: 100%;
+            font-family: inherit;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Unified Navbar used from style.css */
+
+        /* ===== Video Player Specific Styles ===== */
+        .video-wrapper {
+            background: #ffffff;
+            border-radius: 24px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .video-header {
+            padding: 18px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(to left, #ffffff, #f8fafc);
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .video-header-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .video-title-text {
+            color: #1a2942;
+            font-size: 15px;
+            font-weight: 800;
+            margin-right: auto;
+        }
+
+        .edu-video {
+            width: 100%;
+            height: auto;
+            max-height: 380px;
+            object-fit: cover;
+            display: block;
+            background: #0f172a;
+        }
+
+        .video-player-area {
+            background: #ffffff;
+            position: relative;
+        }
+
+        .video-prog-wrap {
+            padding: 24px 30px 8px;
+            background: #ffffff;
+        }
+
+        .video-prog-track {
+            position: relative;
+            height: 8px;
+            background: #f1f5f9;
+            border-radius: 10px;
+            cursor: pointer;
+            overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .video-prog-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4f46e5, #7c3aed);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.1s linear;
+            pointer-events: none;
+        }
+
+        .video-range {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            transform: translateY(-50%);
+            opacity: 0;
+            cursor: pointer;
+            height: 20px;
+            margin: 0;
+        }
+
+        .video-time-row {
+            display: flex;
+            justify-content: space-between;
+            color: #64748b;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 10px 0 5px;
+        }
+
+        /* Controls */
+        .video-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            padding: 10px 30px 30px;
+            background: #ffffff;
+            flex-wrap: wrap;
+        }
+
+        .vc-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .vc-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            background: #f8fafc;
+            color: #475569;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+            border: 1px solid #f1f5f9;
+        }
+
+        .vc-btn:hover {
+            background: #ffffff;
+            color: #4f46e5;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08);
+            border-color: #e2e8f0;
+        }
+
+        .vc-btn.play-btn {
+            width: 65px;
+            height: 65px;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            font-size: 24px;
+            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.35);
+            border: none;
+        }
+
+        .vc-btn.play-btn:hover {
+            transform: scale(1.08) translateY(-3px);
+            box-shadow: 0 15px 30px rgba(79, 70, 229, 0.45);
+            color: white;
+        }
+
+        .vc-label {
+            color: #64748b;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .future-section {
+            background: var(--primary-bg);
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            padding: 28px;
+        }
+
+        .future-title {
+            font-size: 19px;
+            font-weight: bold;
+            color: var(--text-main);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .future-items {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .future-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 16px 20px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .future-icon {
+            width: 44px;
+            height: 44px;
+            flex-shrink: 0;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .future-item-title {
+            font-weight: 700;
+            color: var(--text-main);
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .future-item-desc {
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+    </style>
+    <script src="assets/js/audio.js"></script>
+</head>
+
+<body>
+    <nav class="sidebar">
+        <div class="sidebar-item" style="margin-bottom: 30px;"><i class="fa-solid fa-bars"></i></div>
+        <div class="sidebar-item" onclick="window.location.href='index.html'"><i class="fa-solid fa-house"></i><span
+                data-i18n="nav_home">الرئيسية</span></div>
+        <div class="sidebar-item active" onclick="window.location.href='schools.html'"><i
+                class="fa-solid fa-school"></i><span data-i18n="nav_schools">وصول الجاهزية</span></div>
+        <div class="sidebar-item" onclick="window.location.href='educational-access.html'"><i
+                class="fa-solid fa-book-open-reader"></i><span>وصول التعليمية</span></div>
+        <div class="sidebar-item" onclick="window.location.href='map.html'"><i
+                class="fa-solid fa-map-location-dot"></i><span data-i18n="nav_map">الخريطة</span></div>
+        <div class="sidebar-item fav-item" onclick="window.location.href='favorites.html'"><i
+                class="fa-solid fa-star"></i><span data-i18n="nav_fav">المفضلة</span></div>
+        <div class="sidebar-item" onclick="window.location.href='about.html'"><i
+                class="fa-solid fa-circle-info"></i><span data-i18n="nav_about">عن المنصة</span></div>
+        <div class="sidebar-item" onclick="window.location.href='contact.html'"><i
+                class="fa-solid fa-envelope"></i><span data-i18n="nav_contact">تواصل معنا</span></div>
+    </nav>
+
+    <div class="main-container">
+        <div class="top-navbar">
+            <div class="nav-right" onclick="window.location.href='index.html'" style="cursor: pointer;">
+                <img src="assets/img/wusool_logo.png" alt="وصول" class="nav-brand-logo"
+                    onerror="this.src='assets/img/logo.png'">
+                <span class="nav-brand-text" data-i18n="brand_name">وصول</span>
+            </div>
+
+            <div class="nav-links">
+                <a href="index.html" class="nav-link" data-i18n="nav_home">الرئيسية</a>
+                <a href="schools.html" class="nav-link active" data-i18n="nav_schools">وصول الجاهزية</a>
+                <a href="map.html" class="nav-link" data-i18n="nav_map">الخريطة</a>
+                <a href="educational-access.html" class="nav-link nav-link-access">
+                    <i class="fa-solid fa-book-open-reader" style="margin-left:5px;"></i>وصول التعليمية
+                </a>
+                <a href="favorites.html" class="nav-link" data-i18n="nav_fav">المفضلة</a>
+                <a href="about.html" class="nav-link" data-i18n="nav_about">عن المنصة</a>
+                <a href="contact.html" class="nav-link" data-i18n="nav_contact">تواصل معنا</a>
+            </div>
+
+            <div class="nav-left" id="openRegisterBtn" tabindex="0">
+                <span class="login-text" data-i18n="nav_login">تسجيل الدخول</span>
+                <div class="user-icon"><i class="fa-solid fa-circle-user"></i></div>
+            </div>
+        </div>
+
+        <div class="selection-wrapper">
+            <!-- Phase 1: Main Selection -->
+            <div id="view-initial" class="view-section active">
+                <div class="selection-header">
+                    <h1 class="selection-title">مرحباً بك في دليل المدارس</h1>
+                    <p class="selection-subtitle">اختر نوع التعليم الذي تبحث عنه للبدء</p>
+                </div>
+
+                <!-- Intro Video Player -->
+                <div class="video-wrapper" style="max-width: 750px; margin: 0 auto 40px;">
+                    <div class="video-header">
+                        <div class="video-header-dot" style="background:#ef4444;"></div>
+                        <div class="video-header-dot" style="background:#f59e0b;"></div>
+                        <div class="video-header-dot" style="background:#22c55e;"></div>
+                        <span class="video-title-text"><i class="fa-solid fa-circle-play"
+                                style="color:#818cf8;margin-left:6px;"></i> فيديو إرشادي للمنصة</span>
+                    </div>
+                    <video class="edu-video" src="assets/video/schools.mp4" preload="metadata"></video>
+                    <div class="video-player-area">
+                        <div class="video-prog-wrap">
+                            <div class="video-prog-track">
+                                <div class="video-prog-fill"></div>
+                                <input type="range" class="video-range" min="0" value="0" step="0.01">
+                            </div>
+                            <div class="video-time-row"><span class="v-current">0:00</span><span
+                                    class="v-duration">0:00</span></div>
+                        </div>
+                        <div class="video-controls">
+                            <div class="vc-group"><button class="vc-btn btn-rewind"><i
+                                        class="fa-solid fa-rotate-left"></i></button><span class="vc-label">رجوع
+                                    5ث</span></div>
+                            <div class="vc-group"><button class="vc-btn play-btn btn-play"><i
+                                        class="fa-solid fa-play"></i></button><span
+                                    class="vc-label play-label">تشغيل</span></div>
+                            <div class="vc-group"><button class="vc-btn btn-stop"><i
+                                        class="fa-solid fa-stop"></i></button><span class="vc-label">إيقاف</span></div>
+                            <div class="vc-group"><button class="vc-btn btn-forward"><i
+                                        class="fa-solid fa-rotate-right"></i></button><span class="vc-label">تقديم
+                                    5ث</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cards-grid">
+                    <div class="choice-card" onclick="showView('gov_options_view')">
+                        <div class="choice-icon">🏛️</div>
+                        <h2 class="choice-label">المدارس الحكومية</h2>
+                    </div>
+                    <div class="choice-card" onclick="showView('private_view')">
+                        <div class="choice-icon">🏢</div>
+                        <h2 class="choice-label">المدارس الخاصة</h2>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phase 1.5: Search Results -->
+            <div id="view-search_results" class="view-section" style="text-align: right;">
+                <div class="breadcrumb-nav">
+                    <span class="breadcrumb-item" onclick="showView('initial')">المدارس</span>
+                    <span class="breadcrumb-sep"><i class="fa-solid fa-chevron-left"></i></span>
+                    <span class="breadcrumb-item active">نتائج البحث</span>
+                </div>
+                <div class="content-header">
+                    <h2 class="selection-title" style="margin:0; font-size: 24px;" id="searchResultTitle">🔍 نتائج البحث
+                    </h2>
+                    <button class="back-btn" onclick="showView('initial')"><i class="fa-solid fa-arrow-right"></i>
+                        رجوع</button>
+                </div>
+                <div class="schools-grid" id="searchGrid" style="margin-top: 30px;">
+                    <!-- Search results will be rendered here -->
+                </div>
+            </div>
+
+            <!-- Phase 2: Private View -->
+            <div id="view-private_view" class="view-section" style="text-align: right;">
+                <div class="breadcrumb-nav">
+                    <span class="breadcrumb-item" onclick="showView('initial')">المدارس</span>
+                    <span class="breadcrumb-sep"><i class="fa-solid fa-chevron-left"></i></span>
+                    <span class="breadcrumb-item active">خاص</span>
+                </div>
+                <div class="content-header">
+                    <h2 class="selection-title" style="margin:0; font-size: 24px;">🏢 المدارس الخاصة</h2>
+                    <button class="back-btn" onclick="showView('initial')"><i class="fa-solid fa-arrow-right"></i>
+                        رجوع</button>
+                </div>
+                <p class="selection-subtitle" style="margin-bottom: 30px;">دليل المدارس الخاصة والدولية في العقبة وحالة
+                    الجاهزية بها</p>
+
+                <div class="filters-bar">
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass" style="color: #94a3b8;"></i>
+                        <input type="text" id="privateSearch" placeholder="ابحث باسم المدرسة أو الحي..."
+                            autocomplete="new-password" oninput="filterPrivate()">
+                    </div>
+                    <div class="btn-filter-pill" onclick="openFilterModal('private')">
+                        <i class="fa-solid fa-sliders"></i>
+                        <span>تصفية والتأكيد</span>
+                    </div>
+                </div>
+
+                <div class="schools-grid" id="privateGrid">
+                    <!-- Private schools will be rendered here -->
+                </div>
+            </div>
+
+            <!-- Phase 2: Government Options -->
+            <div id="view-gov_options_view" class="view-section" style="text-align: right;">
+                <div class="breadcrumb-nav">
+                    <span class="breadcrumb-item" onclick="showView('initial')">المدارس</span>
+                    <span class="breadcrumb-sep"><i class="fa-solid fa-chevron-left"></i></span>
+                    <span class="breadcrumb-item active">حكومة</span>
+                </div>
+                <div class="content-header">
+                    <h2 class="selection-title" style="margin:0; font-size: 24px;">🏛️ المدارس الحكومية</h2>
+                    <button class="back-btn" onclick="showView('initial')"><i class="fa-solid fa-arrow-right"></i>
+                        رجوع</button>
+                </div>
+                <p class="selection-subtitle" style="margin-bottom: 30px;">يرجى اختيار المسار التعليمي المطلوب</p>
+
+                <div class="cards-grid">
+                    <div class="choice-card" onclick="showView('academic_view')">
+                        <div class="choice-icon">📚</div>
+                        <h2 class="choice-label">المسار الأكاديمي</h2>
+                        <p class="choice-desc">تصفح المدارس الحكومية للمسار الأكاديمي الشامل</p>
+                    </div>
+                    <div class="choice-card" onclick="window.location.href='btec.html'">
+                        <div class="choice-icon">🎓</div>
+                        <h2 class="choice-label">المسار BTEC</h2>
+                        <p class="choice-desc">تصفح المدارس الحكومية لمسار التعليم المهني BTEC</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phase 3: Academic View -->
+            <div id="view-academic_view" class="view-section" style="text-align: right;">
+                <div class="breadcrumb-nav">
+                    <span class="breadcrumb-item" onclick="showView('initial')">المدارس</span>
+                    <span class="breadcrumb-sep"><i class="fa-solid fa-chevron-left"></i></span>
+                    <span class="breadcrumb-item" onclick="showView('gov_options_view')">حكومة</span>
+                    <span class="breadcrumb-sep"><i class="fa-solid fa-chevron-left"></i></span>
+                    <span class="breadcrumb-item active">أكاديمي</span>
+                </div>
+                <div class="content-header">
+                    <h2 class="selection-title" style="margin:0; font-size: 24px;">🏛️ المدارس الحكومية</h2>
+                    <button class="back-btn" onclick="showView('gov_options_view')"><i
+                            class="fa-solid fa-arrow-right"></i>
+                        رجوع</button>
+                </div>
+                <p class="selection-subtitle" style="margin-bottom: 30px;">دليل المدارس الحكومية في العقبة وحالة
+                    الجاهزية والوصول</p>
+
+                <div class="filters-bar">
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass" style="color: #94a3b8;"></i>
+                        <input type="text" id="academicSearch" placeholder="ابحث باسم المدرسة أو الحي..."
+                            autocomplete="new-password" oninput="filterAcademic()">
+                    </div>
+                    <div class="btn-filter-pill" onclick="openFilterModal('academic')">
+                        <i class="fa-solid fa-sliders"></i>
+                        <span>تصفية والتأكيد</span>
+                    </div>
+                </div>
+
+                <div class="schools-grid" id="academicGrid">
+                    <!-- Schools will be rendered here -->
+                </div>
+            </div>
+
+            <!-- Phase 3: BTEC View Moved to btec.html -->
+        </div>
+    </div>
+
+    <!-- Modals (Copied from standard pages) -->
+    <div class="modal-overlay" id="registerModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">تسجيل حساب جديد</h3>
+                <i class="fa-solid fa-xmark modal-close" id="closeModalBtn"></i>
+            </div>
+            <div class="modal-step active" id="step1">
+                <div class="input-group"><label>الاسم الشخصي</label><input type="text" placeholder="أدخل اسمك الكريم"
+                        class="form-input" id="userNameInput"></div>
+                <div class="input-group"><label>البريد الإلكتروني</label><input type="email"
+                        placeholder="example@email.com" class="form-input" style="text-align: left; direction: ltr;">
+                </div>
+                <div class="input-group"><label>كلمة المرور</label><input type="password" placeholder="********"
+                        class="form-input" style="text-align: left; direction: ltr;"></div>
+                <div class="input-group">
+                    <label>الصورة الشخصية (اختياري)</label>
+                    <label class="file-upload-btn">
+                        <input type="file" id="profileImageInput" accept="image/*">
+                        <i class="fa-solid fa-cloud-arrow-up"></i><span id="fileNameDisplay">اختر صورة من جهازك</span>
+                    </label>
+                </div>
+                <button class="btn-primary" id="btnNextStep"><span>إنشاء الحساب ومتابعة</span> <i
+                        class="fa-solid fa-arrow-left" style="margin-right: 8px;"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Modal -->
+    <div class="modal-overlay" id="filterModal">
+        <div class="modal-box filter-modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" style="display: flex; align-items: center; gap: 10px;">
+                    <i class="fa-solid fa-sliders"></i> تصفية المدارس
+                </h3>
+                <i class="fa-solid fa-xmark modal-close" onclick="closeFilterModal()"></i>
+            </div>
+
+            <div class="filter-group">
+                <label class="filter-label">حالة الجاهزية</label>
+                <div class="filter-options" id="filterReadiness">
+                    <div class="filter-chip active" data-value="all">الكل</div>
+                    <div class="filter-chip" data-value="مهيأة">مهيأة</div>
+                    <div class="filter-chip" data-value="جزئي">جزئي</div>
+                    <div class="filter-chip" data-value="غير مهيأة">غير مهيأة</div>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <label class="filter-label">الجنس</label>
+                <div class="filter-options" id="filterGender">
+                    <div class="filter-chip active" data-value="all">الكل</div>
+                    <div class="filter-chip" data-value="ذكور">ذكور</div>
+                    <div class="filter-chip" data-value="إناث">إناث</div>
+                    <div class="filter-chip" data-value="مختلط">مختلط</div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 12px; margin-top: 30px;">
+                <button class="btn-primary" style="flex: 2; margin-top: 0;" onclick="applyFilters()">تأكيد
+                    وتطبيق</button>
+                <button class="btn-secondary" style="flex: 1;" onclick="resetFilters()">إعادة ضبط</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/i18n.js"></script>
+    <script src="assets/js/data.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script>
+        // State Management
+        let currentFilterContext = 'all';
+        let activeFilters = {
+            type: 'all',
+            readiness: 'all',
+            gender: 'all'
+        };
+
+        function showView(viewId) {
+            document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+            document.getElementById('view-' + viewId).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            if (viewId === 'academic_view') renderAcademicSchools();
+            if (viewId === 'private_view') renderPrivateSchools();
+            if (viewId === 'btec_view') renderBtecSchools();
+        }
+
+        // Filtering Logic
+        function openFilterModal(context) {
+            currentFilterContext = context;
+            document.getElementById('filterModal').classList.add('show');
+        }
+
+        function closeFilterModal() {
+            document.getElementById('filterModal').classList.remove('show');
+        }
+
+        function applyFilters() {
+            activeFilters.readiness = document.querySelector('#filterReadiness .filter-chip.active').dataset.value;
+            activeFilters.gender = document.querySelector('#filterGender .filter-chip.active').dataset.value;
+
+            if (currentFilterContext === 'private') renderPrivateSchools();
+            else if (currentFilterContext === 'academic') renderAcademicSchools();
+            else if (currentFilterContext === 'btec') renderBtecSchools();
+
+            closeFilterModal();
+        }
+
+        function resetFilters() {
+            document.querySelectorAll('#filterModal .filter-chip').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('#filterModal .filter-options').forEach(opt => opt.querySelector('[data-value="all"]').classList.add('active'));
+            applyFilters();
+        }
+
+        document.querySelectorAll('.filter-chip').forEach(chip => {
+            chip.addEventListener('click', function () {
+                this.parentElement.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Updated Rendering Functions
+        function renderPrivateSchools() {
+            const grid = document.getElementById('privateGrid');
+            const query = document.getElementById('privateSearch').value.toLowerCase();
+            let list = schoolsData.filter(s => s.type === 'خاصة');
+
+            if (activeFilters.readiness !== 'all') list = list.filter(s => s.readiness === activeFilters.readiness);
+            if (activeFilters.gender !== 'all') list = list.filter(s => s.gender === activeFilters.gender);
+
+            if (query) {
+                list = list.filter(s => s.name.toLowerCase().includes(query) || s.district.toLowerCase().includes(query));
+            }
+
+            grid.innerHTML = list.length
+                ? list.map(s => createSchoolCard(s)).join('')
+                : `<div class="empty-state" style="grid-column:1/-1; text-align:center; padding: 40px; color: #64748b;"><p>لا توجد مدارس مطابقة حالياً.</p></div>`;
+        }
+
+        function renderAcademicSchools() {
+            const grid = document.getElementById('academicGrid');
+            const query = document.getElementById('academicSearch').value.toLowerCase();
+            let list = schoolsData.filter(s => s.type === 'حكومية' && s.educationType === 'أكاديمي');
+
+            if (activeFilters.readiness !== 'all') list = list.filter(s => s.readiness === activeFilters.readiness);
+            if (activeFilters.gender !== 'all') list = list.filter(s => s.gender === activeFilters.gender);
+
+            if (query) {
+                list = list.filter(s => s.name.toLowerCase().includes(query) || s.district.toLowerCase().includes(query));
+            }
+
+            grid.innerHTML = list.length
+                ? list.map(s => createSchoolCard(s)).join('')
+                : `<div class="empty-state" style="grid-column:1/-1; text-align:center; padding: 40px; color: #64748b;"><p>لا توجد مدارس مطابقة حالياً.</p></div>`;
+        }
+
+        function renderBtecSchools() {
+            const grid = document.getElementById('btecSchoolsGrid');
+            const q = document.getElementById('btecSearchInput').value.trim().toLowerCase();
+            let list = schoolsData.filter(s => s.educationType === 'مهني');
+
+            if (activeFilters.readiness !== 'all') list = list.filter(s => s.readiness === activeFilters.readiness);
+            if (activeFilters.gender !== 'all') list = list.filter(s => s.gender === activeFilters.gender);
+
+            if (q) {
+                list = list.filter(s => s.name.toLowerCase().includes(q) || s.district.toLowerCase().includes(q));
+            }
+
+            grid.innerHTML = list.length
+                ? list.map(s => createSchoolCard(s)).join('')
+                : `<div class="empty-state" style="grid-column:1/-1; text-align:center; padding: 40px; color: #64748b;"><p>لا توجد مدارس مطابقة حالياً.</p></div>`;
+        }
+
+        function filterPrivate() { renderPrivateSchools(); }
+        function filterAcademic() { renderAcademicSchools(); }
+        function filterBtec() { renderBtecSchools(); }
+
+        function switchBtecTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            document.getElementById('tab-' + tab).classList.add('active');
+        }
+
+        // ===== Multiple Video Players Logic =====
+        function fmtTime(sec) {
+            if (isNaN(sec)) return "0:00";
+            let m = Math.floor(sec / 60);
+            let s = Math.floor(sec % 60);
+            return m + ':' + (s < 10 ? '0' : '') + s;
+        }
+
+        document.querySelectorAll('.video-wrapper').forEach(wrapper => {
+            const vid = wrapper.querySelector('.edu-video');
+            const playBtn = wrapper.querySelector('.btn-play');
+            const playIcon = playBtn.querySelector('i');
+            const playLabel = wrapper.querySelector('.play-label');
+            const progFill = wrapper.querySelector('.video-prog-fill');
+            const vRange = wrapper.querySelector('.video-range');
+            const vCurrent = wrapper.querySelector('.v-current');
+            const vDuration = wrapper.querySelector('.v-duration');
+            const rewindBtn = wrapper.querySelector('.btn-rewind');
+            const stopBtn = wrapper.querySelector('.btn-stop');
+            const forwardBtn = wrapper.querySelector('.btn-forward');
+
+            if (!vid) return;
+
+            vid.addEventListener('loadedmetadata', () => {
+                vDuration.innerText = fmtTime(vid.duration);
+                vRange.max = vid.duration;
+            });
+
+            vid.addEventListener('timeupdate', () => {
+                vCurrent.innerText = fmtTime(vid.currentTime);
+                vRange.value = vid.currentTime;
+                if (vid.duration) {
+                    let pct = (vid.currentTime / vid.duration) * 100;
+                    progFill.style.width = pct + '%';
+                }
+            });
+
+            vRange.addEventListener('input', () => {
+                vid.currentTime = vRange.value;
+            });
+
+            vid.addEventListener('ended', () => {
+                playIcon.className = 'fa-solid fa-rotate-right';
+                playLabel.innerText = 'إعادة';
+            });
+
+            playBtn.addEventListener('click', () => {
+                if (vid.paused) {
+                    // Pause other videos
+                    document.querySelectorAll('.edu-video').forEach(otherVid => {
+                        if (otherVid !== vid && !otherVid.paused) {
+                            otherVid.pause();
+                            const otherWrapper = otherVid.closest('.video-wrapper');
+                            otherWrapper.querySelector('.btn-play i').className = 'fa-solid fa-play';
+                            otherWrapper.querySelector('.play-label').innerText = 'تشغيل';
+                        }
+                    });
+
+                    vid.play();
+                    playIcon.className = 'fa-solid fa-pause';
+                    playLabel.innerText = 'إيقاف مؤقت';
+                } else {
+                    vid.pause();
+                    playIcon.className = 'fa-solid fa-play';
+                    playLabel.innerText = 'تشغيل';
+                }
+            });
+
+            stopBtn.addEventListener('click', () => {
+                vid.pause();
+                vid.currentTime = 0;
+                playIcon.className = 'fa-solid fa-play';
+                playLabel.innerText = 'تشغيل';
+            });
+
+            rewindBtn.addEventListener('click', () => {
+                vid.currentTime = Math.max(0, vid.currentTime - 5);
+            });
+
+            forwardBtn.addEventListener('click', () => {
+                vid.currentTime = Math.min(vid.duration || 0, vid.currentTime + 5);
+            });
+        });
+
+        // Handle URL Parameters for specific school navigation or search
+        function handleUrlParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const schoolId = urlParams.get('id');
+            const query = urlParams.get('q');
+
+            if (schoolId) {
+                const school = schoolsData.find(s => s.id === schoolId);
+                if (school) {
+                    if (school.type === 'خاصة') showView('private_view');
+                    else if (school.educationType === 'مهني') showView('btec_view');
+                    else showView('academic_view');
+
+                    // Small delay to ensure cards are rendered
+                    setTimeout(() => {
+                        const card = document.querySelector(`.school-card[data-school-id="${schoolId}"]`);
+                        if (card) {
+                            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            card.style.boxShadow = '0 0 20px rgba(79, 70, 229, 0.5)';
+                            card.style.border = '2px solid #4f46e5';
+                            card.style.transform = 'scale(1.05)';
+                        }
+                    }, 600);
+                }
+            } else if (query) {
+                const q = query.toLowerCase().trim();
+                const results = schoolsData.filter(s =>
+                    s.name.toLowerCase().includes(q) ||
+                    s.district.toLowerCase().includes(q)
+                );
+
+                showView('search_results');
+                const grid = document.getElementById('searchGrid');
+                const title = document.getElementById('searchResultTitle');
+
+                title.innerHTML = `🔍 نتائج البحث عن: <span style="color: #4f46e5;">${query}</span>`;
+
+                if (results.length > 0) {
+                    grid.innerHTML = results.map(s => createSchoolCard(s)).join('');
+                } else {
+                    grid.innerHTML = `
+                        <div style="grid-column: 1/-1; text-align: center; padding: 60px; color: #64748b;">
+                            <i class="fa-solid fa-magnifying-glass" style="font-size: 48px; opacity: 0.2; margin-bottom: 20px;"></i>
+                            <p>عذراً، لم نجد أي مدارس تطابق بحثك عن "${query}"</p>
+                            <button class="btn-primary" onclick="showView('initial')" style="margin-top: 20px;">العودة للدليل</button>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', handleUrlParams);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="nav_fav">المفضلة - وصول</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        .favorites-header {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            margin-bottom: 40px;
+        }
+
+        .favorites-title {
+            font-size: 36px;
+            font-weight: 800;
+            color: #1a2942;
+            margin-bottom: 15px;
+        }
+
+        .empty-favorites {
+            text-align: center;
+            padding: 100px 20px;
+            color: #64748b;
+        }
+
+        .empty-favorites i {
+            font-size: 64px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="sidebar">
+        <div class="sidebar-item" style="margin-bottom: 30px;"><i class="fa-solid fa-bars"></i></div>
+        <div class="sidebar-item" onclick="window.location.href='index.html'"><i class="fa-solid fa-house"></i><span
+                data-i18n="nav_home">الرئيسية</span></div>
+        <div class="sidebar-item" onclick="window.location.href='schools.html'"><i class="fa-solid fa-school"></i><span
+                data-i18n="nav_schools">وصول الجاهزية</span></div>
+        <div class="sidebar-item" onclick="window.location.href='educational-access.html'"><i
+                class="fa-solid fa-book-open-reader"></i><span>وصول التعليمية</span></div>
+        <div class="sidebar-item" onclick="window.location.href='map.html'"><i
+                class="fa-solid fa-map-location-dot"></i><span data-i18n="nav_map">الخريطة</span></div>
+        <div class="sidebar-item active" onclick="window.location.href='favorites.html'"><i
+                class="fa-solid fa-star"></i><span data-i18n="nav_fav">المفضلة</span></div>
+        <div class="sidebar-item" onclick="window.location.href='about.html'"><i
+                class="fa-solid fa-circle-info"></i><span data-i18n="nav_about">عن المنصة</span></div>
+        <div class="sidebar-item" onclick="window.location.href='contact.html'"><i
+                class="fa-solid fa-envelope"></i><span data-i18n="nav_contact">تواصل معنا</span></div>
+    </nav>
+
+    <div class="main-container">
+        <div class="top-navbar">
+            <div class="nav-right" onclick="window.location.href='index.html'" style="cursor: pointer;">
+                <img src="assets/img/wusool_logo.png" alt="وصول" class="nav-brand-logo"
+                    onerror="this.src='assets/img/logo.png'">
+                <span class="nav-brand-text" data-i18n="brand_name">وصول</span>
+            </div>
+
+            <div class="nav-links">
+                <a href="index.html" class="nav-link" data-i18n="nav_home">الرئيسية</a>
+                <a href="schools.html" class="nav-link" data-i18n="nav_schools">وصول الجاهزية</a>
+                <a href="map.html" class="nav-link" data-i18n="nav_map">الخريطة</a>
+                <a href="educational-access.html" class="nav-link nav-link-access">
+                    <i class="fa-solid fa-book-open-reader" style="margin-left:5px;"></i>وصول التعليمية
+                </a>
+                <a href="favorites.html" class="nav-link active" data-i18n="nav_fav">المفضلة</a>
+                <a href="about.html" class="nav-link" data-i18n="nav_about">عن المنصة</a>
+                <a href="contact.html" class="nav-link" data-i18n="nav_contact">تواصل معنا</a>
+            </div>
+
+            <div class="nav-left" id="openRegisterBtn" tabindex="0">
+                <span class="login-text" data-i18n="nav_login">تسجيل الدخول</span>
+                <div class="user-icon"><i class="fa-solid fa-circle-user"></i></div>
+            </div>
+        </div>
+
+        <header class="favorites-header">
+            <h1 class="favorites-title" data-i18n="fav_page_title">مدارسي المفضلة</h1>
+            <p style="color: #64748b;" data-i18n="fav_page_subtitle">قائمة المدارس التي قمت بحفظها للوصول السريع إليها
+            </p>
+        </header>
+
+        <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+            <div id="favoritesGrid" class="schools-grid">
+                <!-- Favorites rendered via main.js -->
+            </div>
+            <div id="emptyFavorites" class="empty-favorites" style="display: none;">
+                <i class="fa-regular fa-star"></i>
+                <h3 data-i18n="no_fav_title">لا توجد مدارس في المفضلة بعد</h3>
+                <p data-i18n="no_fav_desc">يمكنك إضافة المدارس إلى المفضلة من خلال الضغط على أيقونة النجمة في بطاقة
+                    المدرسة.</p>
+                <button class="btn-primary" onclick="window.location.href='schools.html'" style="margin-top: 20px;"
+                    data-i18n="browse_schools">تصفح المدارس</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/i18n.js"></script>
+    <script src="assets/js/data.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderFavorites();
+        });
+
+        function renderFavorites() {
+            const grid = document.getElementById('favoritesGrid');
+            const empty = document.getElementById('emptyFavorites');
+            const favIds = JSON.parse(localStorage.getItem('wusool_favorites') || '[]');
+
+            const favSchools = schoolsData.filter(s => favIds.includes(s.id));
+
+            if (favSchools.length === 0) {
+                grid.innerHTML = '';
+                empty.style.display = 'block';
+            } else {
+                empty.style.display = 'none';
+                grid.innerHTML = favSchools.map(s => createSchoolCard(s)).join('');
+            }
+        }
+    </script>
+</body>
+
+</html>

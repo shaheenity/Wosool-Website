@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="nav_map">الخريطة التفاعلية - وصول</title>
+    <!-- أيقونات Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        .marker-pin {
+            width: 30px;
+            height: 30px;
+            border-radius: 50% 50% 50% 0;
+            background: #27ae60;
+            position: absolute;
+            transform: rotate(-45deg);
+            left: 50%;
+            top: 50%;
+            margin: -15px 0 0 -15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            border: 2px solid white;
+            z-index: 1000;
+        }
+
+        .marker-pin::after {
+            content: '';
+            width: 14px;
+            height: 14px;
+            background: white;
+            position: absolute;
+            border-radius: 50%;
+            transform: rotate(45deg);
+        }
+
+        .custom-div-icon {
+            background: none !important;
+            border: none !important;
+            width: 30px !important;
+            height: 42px !important;
+        }
+
+        :root {
+            --primary: #1a2942;
+            --accent: #0f766e;
+            --bg: #f6f9fc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #f1f5f9;
+            --radius: 20px;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            background: var(--bg);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Using global sidebar and main-container from style.css */
+
+        /* الشريط العلوي يتم التحكم به عبر style.css */
+
+        /* الكروت */
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .card-header-icon {
+            font-size: 50px;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .btn-filter {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 30px;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: opacity 0.2s;
+        }
+
+        .btn-filter:hover {
+            opacity: 0.9;
+        }
+
+        .btn-filter.accent {
+            background: var(--accent);
+        }
+
+        /* قائمة المدارس */
+        .schools-list {
+            max-height: 220px;
+            overflow-y: auto;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            padding: 12px;
+            text-align: right;
+            background: #fafbfc;
+        }
+
+        .school-item {
+            padding: 6px 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 14px;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .school-item:hover {
+            background: rgba(15, 118, 110, 0.08);
+        }
+
+        .school-item i {
+            color: var(--accent);
+            font-size: 12px;
+        }
+
+        /* الخريطة */
+        #schoolsMap {
+            height: 520px;
+            width: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .leaflet-popup-content {
+            font-size: 15px;
+            font-weight: 600;
+            text-align: right;
+            color: var(--primary);
+        }
+
+        /* التوست */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 14px;
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+
+        /* تجاوب */
+        @media (max-width: 900px) {
+            .sidebar {
+                width: 70px;
+            }
+
+            .sidebar-item span {
+                display: none;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- الشريط الجانبي -->
+    <nav class="sidebar">
+        <div class="sidebar-item" style="margin-bottom: 30px;"><i class="fa-solid fa-bars"></i></div>
+        <div class="sidebar-item" onclick="window.location.href='index.html'"><i class="fa-solid fa-house"></i><span
+                data-i18n="nav_home">الرئيسية</span></div>
+        <div class="sidebar-item" onclick="window.location.href='schools.html'"><i class="fa-solid fa-school"></i><span
+                data-i18n="nav_schools">وصول الجاهزية</span></div>
+        <div class="sidebar-item" onclick="window.location.href='educational-access.html'"><i
+                class="fa-solid fa-book-open-reader"></i><span>وصول التعليمية</span></div>
+        <div class="sidebar-item active" onclick="window.location.href='map.html'"><i
+                class="fa-solid fa-map-location-dot"></i><span data-i18n="nav_map">الخريطة</span></div>
+        <div class="sidebar-item fav-item" onclick="window.location.href='favorites.html'"><i
+                class="fa-solid fa-star"></i><span data-i18n="nav_fav">المفضلة</span></div>
+        <div class="sidebar-item" onclick="window.location.href='about.html'"><i
+                class="fa-solid fa-circle-info"></i><span data-i18n="nav_about">عن المنصة</span></div>
+        <div class="sidebar-item" onclick="window.location.href='contact.html'"><i
+                class="fa-solid fa-envelope"></i><span data-i18n="nav_contact">تواصل معنا</span></div>
+    </nav>
+
+    <!-- المحتوى الرئيسي -->
+    <div class="main-container">
+        <!-- الشريط العلوي -->
+        <div class="top-navbar">
+            <div class="nav-right" onclick="window.location.href='index.html'" style="cursor: pointer;">
+                <img src="assets/img/wusool_logo.png" alt="وصول" class="nav-brand-logo"
+                    onerror="this.src='assets/img/logo.png'">
+                <span class="nav-brand-text" data-i18n="brand_name">وصول</span>
+            </div>
+
+            <div class="nav-links">
+                <a href="index.html" class="nav-link" data-i18n="nav_home">الرئيسية</a>
+                <a href="schools.html" class="nav-link" data-i18n="nav_schools">وصول الجاهزية</a>
+                <a href="map.html" class="nav-link active" data-i18n="nav_map">الخريطة</a>
+                <a href="educational-access.html" class="nav-link nav-link-access">
+                    <i class="fa-solid fa-book-open-reader" style="margin-left:5px;"></i>وصول التعليمية
+                </a>
+                <a href="favorites.html" class="nav-link" data-i18n="nav_fav">المفضلة</a>
+                <a href="about.html" class="nav-link" data-i18n="nav_about">عن المنصة</a>
+                <a href="contact.html" class="nav-link" data-i18n="nav_contact">تواصل معنا</a>
+            </div>
+
+            <div class="nav-left" id="openRegisterBtn" tabindex="0">
+                <span class="login-text" data-i18n="nav_login">تسجيل الدخول</span>
+                <div class="user-icon"><i class="fa-solid fa-circle-user"></i></div>
+            </div>
+        </div>
+
+        <!-- كرت المعلومات والأزرار -->
+        <div class="card" style="display: flex; gap: 25px; flex-wrap: wrap; align-items: flex-start;">
+            <div style="flex: 1; min-width: 250px; text-align: center;">
+                <div class="card-header-icon"><i class="fa-solid fa-map-location-dot"></i></div>
+                <h2 style="color: var(--primary); margin: 0 0 8px;">الخريطة التفاعلية</h2>
+                <p style="color: var(--text-light); margin: 0 0 15px; font-size: 14px;">
+                    عرض مواقع جميع مدارس محافظة العقبة (Markers) مع إمكانية التنقل والبحث.
+                </p>
+                <div style="display: flex; justify-content: center; margin-top: 15px;">
+                    <button class="btn-filter" onclick="focusOnDirectorate()"
+                        style="background: var(--primary); color: white; border-radius: 12px; padding: 12px 20px; font-size: 15px; box-shadow: 0 4px 10px rgba(26,41,66,0.2);">
+                        <i class="fa-solid fa-building-columns"></i> مديرية التربية والتعليم لمحافظة العقبة
+                    </button>
+                </div>
+            </div>
+            <div style="flex: 1; min-width: 280px; max-width: 450px;">
+                <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 15px;">
+                    <button class="btn-filter" onclick="focusMapOnAqaba()" title="إعادة ضبط التركيز">
+                        <i class="fa-solid fa-crosshairs"></i>
+                    </button>
+                    <button class="btn-filter" onclick="filterMarkers('all')"
+                        style="background: #64748b; font-size: 12px;" data-i18n="all_schools">الكل</button>
+                    <button class="btn-filter" onclick="filterMarkers('مهيأة')"
+                        style="background: #27ae60; font-size: 12px;" data-i18n="status_ready">مهيأة</button>
+                    <button class="btn-filter" onclick="filterMarkers('جزئي')"
+                        style="background: #f39c12; font-size: 12px;" data-i18n="status_partial">جزئي</button>
+                    <button class="btn-filter" onclick="filterMarkers('غير مهيأة')"
+                        style="background: #e74c3c; font-size: 12px;" data-i18n="status_low">غير مهيأة</button>
+                </div>
+                <div class="schools-list" id="schoolsListContainer">
+                    <div style="font-weight:700; color: var(--primary); margin-bottom: 8px;" data-i18n="nearby_title">📌
+                        قائمة سريعة بالمدارس
+                    </div>
+                    <div id="schoolsDynamicList"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- حاوية الخريطة -->
+        <div class="card" style="padding: 0; overflow: hidden;">
+            <div id="schoolsMap"></div>
+        </div>
+    </div>
+
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="assets/js/i18n.js"></script>
+    <script src="assets/js/data.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script>
+        // ==================== إعداد الخريطة ====================
+        const map = L.map('schoolsMap').setView([29.55, 35.02], 12);
+
+        // علامة مديرية التربية والتعليم
+        const directorateMarker = L.marker([29.5354118, 35.0119819], {
+            icon: L.divIcon({
+                className: 'custom-div-icon',
+                html: `<div class='marker-pin' style='background-color:#1a2942;'></div>`,
+                iconSize: [30, 42],
+                iconAnchor: [15, 42]
+            })
+        }).addTo(map).bindPopup(`
+            <div style="text-align:right; font-family: 'Segoe UI', Tahoma, sans-serif; min-width:180px;">
+                <h4 style="margin:0 0 5px; color:#1a2942;"><i class="fa-solid fa-building-columns"></i> مديرية التربية والتعليم</h4>
+                <div style="font-size:12px; color:#64748b; margin-bottom:8px;">
+                    محافظة العقبة
+                </div>
+            </div>
+        `);
+
+        function focusOnDirectorate() {
+            map.setView([29.5354118, 35.0119819], 16, { animate: true });
+            directorateMarker.openPopup();
+
+            // التمرير إلى الخريطة
+            document.getElementById('schoolsMap').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // Google Satellite Hybrid Tiles
+        L.tileLayer('https://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}', {
+            maxZoom: 20,
+            subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+            attribution: '&copy; Google Maps'
+        }).addTo(map);
+
+        // أيقونات مخصصة بناءً على الجاهزية (Pin Style)
+        const createIcon = (color) => L.divIcon({
+            className: 'custom-div-icon',
+            html: `<div class='marker-pin' style='background-color:${color};'></div>`,
+            iconSize: [30, 42],
+            iconAnchor: [15, 42]
+        });
+
+        const icons = {
+            'مهيأة': createIcon('#27ae60'),
+            'جزئي': createIcon('#f39c12'),
+            'غير مهيأة': createIcon('#e74c3c')
+        };
+
+        const markersGroup = L.layerGroup().addTo(map);
+        const allMarkers = [];
+
+        // إضافة العلامات
+        function renderMarkers(filter = 'all') {
+            markersGroup.clearLayers();
+            allMarkers.length = 0;
+            const bounds = L.latLngBounds();
+
+            schoolsData.forEach(school => {
+                if (!school.lat || !school.lng) return;
+                if (filter !== 'all' && school.readiness !== filter) return;
+
+                const marker = L.marker([school.lat, school.lng], { icon: icons[school.readiness] })
+                    .bindPopup(`
+                        <div style="text-align:right; font-family: 'Segoe UI', Tahoma, sans-serif; min-width:180px;">
+                            <h4 style="margin:0 0 5px; color:#1a2942;">${school.name}</h4>
+                            <div style="font-size:12px; color:#64748b; margin-bottom:8px;">
+                                <i class="fa-solid fa-location-dot"></i> ${school.district}
+                            </div>
+                            <div style="margin-bottom:12px;">
+                                <span style="background:${school.readiness === 'مهيأة' ? '#e8f5e9' : school.readiness === 'جزئي' ? '#fff3e0' : '#ffebee'}; 
+                                             color:${school.readiness === 'مهيأة' ? '#2e7d32' : school.readiness === 'جزئي' ? '#ef6c00' : '#c62828'}; 
+                                             padding:2px 8px; border-radius:10px; font-size:11px; font-weight:bold;">
+                                    ${school.readiness}
+                                </span>
+                            </div>
+                            <div style="display:flex; gap:5px; margin-top:10px;">
+                                <button onclick="window.location.href='schools.html?id=${school.id}'" 
+                                        style="flex:1; background:#1a2942; color:white; border:none; padding:6px; border-radius:15px; cursor:pointer; font-size:10px; font-weight:bold;">
+                                    <i class="fa-solid fa-circle-info"></i> التفاصيل
+                                </button>
+                                <button onclick="callSchool('${school.phone}', '${school.name}')" 
+                                        style="flex:1; background:#16a34a; color:white; border:none; padding:6px; border-radius:15px; cursor:pointer; font-size:10px; font-weight:bold;">
+                                    <i class="fa-solid fa-phone"></i> اتصال
+                                </button>
+                                <button onclick="toggleFavorite('${school.id}', event)" 
+                                        style="background:#f1f5f9; color:#f59e0b; border:none; width:30px; border-radius:15px; cursor:pointer; font-size:14px; display:flex; align-items:center; justify-content:center;">
+                                    <i class="${JSON.parse(localStorage.getItem('wusool_favorites') || '[]').includes(school.id) ? 'fa-solid' : 'fa-regular'} fa-star"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `);
+                markersGroup.addLayer(marker);
+                allMarkers.push({ marker, school });
+                bounds.extend([school.lat, school.lng]);
+            });
+
+            if (allMarkers.length > 0 && filter === 'all') {
+                map.fitBounds(bounds, { padding: [50, 50] });
+            }
+        }
+
+        // ==================== القائمة السريعة ====================
+        function renderQuickList() {
+            const listContainer = document.getElementById('schoolsDynamicList');
+            listContainer.innerHTML = '';
+
+            schoolsData.forEach((school) => {
+                const div = document.createElement('div');
+                div.className = 'school-item';
+                const dotColor = school.readiness === 'مهيأة' ? '#27ae60' : school.readiness === 'جزئي' ? '#f39c12' : '#e74c3c';
+                div.innerHTML = `
+                    <div style="width:8px; height:8px; border-radius:50%; background:${dotColor};"></div>
+                    <span style="flex:1">${school.name}</span>
+                    <i class="fa-solid fa-chevron-left" style="font-size:10px; opacity:0.3;"></i>
+                `;
+                div.addEventListener('click', () => {
+                    map.setView([school.lat, school.lng], 16, { animate: true });
+                    // البحث عن الماركر وفتحه
+                    const mObj = allMarkers.find(m => m.school.id === school.id);
+                    if (mObj) mObj.marker.openPopup();
+                });
+                listContainer.appendChild(div);
+            });
+        }
+
+        // ==================== الفلترة ====================
+        function filterMarkers(type) {
+            renderMarkers(type);
+            const label = type === 'all' ? 'جميع المدارس' : type;
+            if (window.showToast) window.showToast(`عرض: ${label}`, 'success');
+        }
+
+        // ==================== التعامل مع المعاملات (URL Params) ====================
+        function handleUrlParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const schoolId = urlParams.get('id');
+
+            if (schoolId) {
+                const found = allMarkers.find(m => m.school.id === schoolId);
+                if (found) {
+                    map.setView([found.school.lat, found.school.lng], 16);
+                    setTimeout(() => found.marker.openPopup(), 500);
+                }
+            }
+        }
+
+        // ==================== وظائف الأزرار ====================
+        function focusMapOnAqaba() {
+            map.setView([29.55, 35.02], 12, { animate: true });
+            if (window.showToast) window.showToast('تم التركيز على منطقة العقبة');
+        }
+
+        // تكبير الخريطة عند تحميل الصفحة
+        window.addEventListener('DOMContentLoaded', () => {
+            renderMarkers();
+            renderQuickList();
+            setTimeout(() => {
+                map.invalidateSize();
+                handleUrlParams();
+            }, 500);
+        });
+    </script>
+</body>
+
+</html>

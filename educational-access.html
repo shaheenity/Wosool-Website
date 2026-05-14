@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>وصول التعليمية - وصول</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        /* ===== Page Header ===== */
+        .page-header {
+            margin-bottom: 28px;
+        }
+
+        .page-title {
+            color: #1a2942;
+            font-size: 26px;
+            margin: 0 0 6px 0;
+            font-weight: bold;
+        }
+
+        .page-subtitle {
+            color: #64748b;
+            margin: 0;
+            font-size: 14px;
+        }
+
+        /* ===== Path Tabs ===== */
+        .path-tabs {
+            display: flex;
+            gap: 14px;
+            margin-bottom: 30px;
+        }
+
+        .path-tab {
+            flex: 1;
+            padding: 16px 24px;
+            border-radius: 18px;
+            border: 2px solid #e2e8f0;
+            background: #f8fafc;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            font-weight: bold;
+            font-size: 15px;
+            color: #64748b;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .path-tab.active {
+            border-color: #4f46e5;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .path-tab:hover:not(.active) {
+            border-color: #4f46e5;
+            color: #4f46e5;
+            background: #f0f0ff;
+        }
+
+        /* ===== Path Content ===== */
+        .path-content {
+            display: none;
+        }
+
+        .path-content.active {
+            display: block;
+            animation: fadeSlideIn 0.4s ease;
+        }
+
+        @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== Video Player ===== */
+        .video-wrapper {
+            background: #ffffff;
+            border-radius: 24px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .video-header {
+            padding: 18px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(to left, #ffffff, #f8fafc);
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .video-header-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .video-title-text {
+            color: #1a2942;
+            font-size: 15px;
+            font-weight: 800;
+            margin-right: auto;
+        }
+
+        .edu-video {
+            width: 100%;
+            height: auto;
+            max-height: 380px;
+            object-fit: cover;
+            display: block;
+            background: #0f172a;
+        }
+
+        #videoPlayerArea {
+            background: #ffffff;
+            position: relative;
+        }
+
+        .video-prog-wrap {
+            padding: 24px 30px 8px;
+            background: #ffffff;
+        }
+
+        .video-prog-track {
+            position: relative;
+            height: 8px;
+            background: #f1f5f9;
+            border-radius: 10px;
+            cursor: pointer;
+            overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .video-prog-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4f46e5, #7c3aed);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.1s linear;
+            pointer-events: none;
+        }
+
+        #videoRange {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            transform: translateY(-50%);
+            opacity: 0;
+            cursor: pointer;
+            height: 20px;
+            margin: 0;
+        }
+
+        .video-time-row {
+            display: flex;
+            justify-content: space-between;
+            color: #64748b;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 10px 0 5px;
+        }
+
+        /* Controls */
+        .video-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            padding: 10px 30px 30px;
+            background: #ffffff;
+            flex-wrap: wrap;
+        }
+
+        .vc-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .vc-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            background: #f8fafc;
+            color: #475569;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+            border: 1px solid #f1f5f9;
+        }
+
+        .vc-btn:hover {
+            background: #ffffff;
+            color: #4f46e5;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08);
+            border-color: #e2e8f0;
+        }
+
+        .vc-btn.play-btn {
+            width: 65px;
+            height: 65px;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            font-size: 24px;
+            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.35);
+            border: none;
+        }
+
+        .vc-btn.play-btn:hover {
+            transform: scale(1.08) translateY(-3px);
+            box-shadow: 0 15px 30px rgba(79, 70, 229, 0.45);
+            color: white;
+        }
+
+        .vc-label {
+            color: #64748b;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        /* No video notice */
+        .no-video-notice {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 50px 20px;
+            gap: 12px;
+        }
+
+        .no-video-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(79, 70, 229, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: #818cf8;
+        }
+
+        .no-video-text {
+            color: #94a3b8;
+            font-size: 15px;
+            text-align: center;
+            line-height: 1.7;
+        }
+
+        .no-video-path {
+            color: #818cf8;
+            font-family: monospace;
+            font-size: 13px;
+            background: rgba(79, 70, 229, 0.1);
+            padding: 4px 12px;
+            border-radius: 8px;
+        }
+
+        /* ===== Future Outlook ===== */
+        .future-section {
+            background: linear-gradient(135deg, #f8faff, #eef2ff);
+            border-radius: 20px;
+            border: 1px solid #e0e7ff;
+            padding: 28px;
+        }
+
+        .future-title {
+            font-size: 19px;
+            font-weight: bold;
+            color: #1a2942;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .future-items {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .future-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            background: white;
+            border-radius: 16px;
+            padding: 16px 20px;
+            border: 1px solid #e0e7ff;
+            box-shadow: 0 2px 10px rgba(79, 70, 229, 0.06);
+            transition: transform 0.2s;
+        }
+
+        .future-item:hover {
+            transform: translateX(-4px);
+        }
+
+        .future-icon {
+            width: 44px;
+            height: 44px;
+            flex-shrink: 0;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .future-item-title {
+            font-weight: 700;
+            color: #1a2942;
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .future-item-desc {
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        /* Academic coming soon */
+        .academic-soon {
+            background: white;
+            border-radius: 20px;
+            border: 2px dashed #cbd5e1;
+            padding: 50px 30px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .academic-soon-icon {
+            font-size: 52px;
+        }
+
+        .academic-soon-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #475569;
+        }
+
+        .academic-soon-text {
+            color: #94a3b8;
+            font-size: 15px;
+        }
+
+        /* Nav access button */
+        .nav-link-access {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white !important;
+            border-radius: 30px;
+            padding: 8px 18px !important;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .nav-link-access:hover {
+            box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Sidebar active highlight */
+        .sidebar-item.edu-active {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.15), rgba(124, 58, 237, 0.1)) !important;
+            color: #4f46e5 !important;
+            border-right: 3px solid #4f46e5;
+        }
+    </style>
+    <script src="assets/js/audio.js"></script>
+</head>
+
+<body>
+    <nav class="sidebar">
+        <div class="sidebar-item" style="margin-bottom: 30px;"><i class="fa-solid fa-bars"></i></div>
+        <div class="sidebar-item" onclick="window.location.href='index.html'"><i class="fa-solid fa-house"></i><span>الرئيسية</span>
+        </div>
+        <div class="sidebar-item" onclick="window.location.href='schools.html'"><i
+                class="fa-solid fa-school"></i><span data-i18n="nav_schools">وصول الجاهزية</span></div>
+        <div class="sidebar-item active edu-active"><i class="fa-solid fa-book-open-reader"></i><span>وصول التعليمية</span></div>
+        <div class="sidebar-item" onclick="window.location.href='map.html'"><i
+                class="fa-solid fa-map-location-dot"></i>الخريطة</div>
+        <div class="sidebar-item fav-item" onclick="showToast('قريباً! ميزة المفضلة قيد التطوير.')"><i
+                class="fa-solid fa-star"></i><span>المفضلة</span></div>
+
+        <div class="sidebar-item" onclick="window.location.href='about.html'"><i class="fa-solid fa-circle-info"></i>عن
+            المنصة</div>
+        <div class="sidebar-item" onclick="window.location.href='contact.html'"><i class="fa-solid fa-envelope"></i><span data-i18n="nav_contact">تواصل معنا</span></div>
+    </nav>
+
+    <div class="main-container">
+        <div class="top-navbar">
+            <div class="nav-right" onclick="window.location.href='index.html'" style="cursor: pointer;">
+                <img src="assets/img/wusool_logo.png" alt="وصول" class="nav-brand-logo"
+                    onerror="this.src='assets/img/logo.png'">
+                <span class="nav-brand-text" data-i18n="brand_name">وصول</span>
+            </div>
+
+            <div class="nav-links">
+                <a href="index.html" class="nav-link" data-i18n="nav_home">الرئيسية</a>
+                <a href="schools.html" class="nav-link" data-i18n="nav_schools">وصول الجاهزية</a>
+                <a href="map.html" class="nav-link" data-i18n="nav_map">الخريطة</a>
+                <a href="educational-access.html" class="nav-link nav-link-access active">
+                    <i class="fa-solid fa-book-open-reader" style="margin-left:5px;"></i>وصول التعليمية
+                </a>
+                <a href="favorites.html" class="nav-link" data-i18n="nav_fav">المفضلة</a>
+                <a href="about.html" class="nav-link" data-i18n="nav_about">عن المنصة</a>
+                <a href="contact.html" class="nav-link" data-i18n="nav_contact">تواصل معنا</a>
+            </div>
+
+            <div class="nav-left" id="openRegisterBtn" tabindex="0">
+                <span class="login-text" data-i18n="nav_login">تسجيل الدخول</span>
+                <div class="user-icon"><i class="fa-solid fa-circle-user"></i></div>
+            </div>
+        </div>
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">📚 وصول التعليمية</h1>
+            <p class="page-subtitle">اختر مسارك التعليمي وتصفح المحتوى والموارد المتاحة لك</p>
+        </div>
+
+        <!-- Path Tabs -->
+        <div class="path-tabs">
+            <button class="path-tab active" id="tabBtec" onclick="switchPath('btec')">
+                <i class="fa-solid fa-graduation-cap"></i> مسار BTEC
+            </button>
+            <button class="path-tab" id="tabAcademic" onclick="switchPath('academic')">
+                <i class="fa-solid fa-university"></i> المسار الأكاديمي
+            </button>
+        </div>
+
+        <!-- ===== BTEC PATH ===== -->
+        <div class="path-content active" id="pathBtec">
+
+            <!-- Path Introduction -->
+            <div
+                style="background: white; border-radius: 16px; padding: 24px; border: 1px solid #e0e7ff; margin-bottom: 24px; box-shadow: 0 4px 12px rgba(79,70,229,0.05); border-right: 4px solid #4f46e5;">
+                <h3
+                    style="color: #1a2942; font-size: 18px; margin: 0 0 10px 0; display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-graduation-cap" style="color: #4f46e5;"></i> تعريف بمسار BTEC
+                </h3>
+                <p style="color: #64748b; font-size: 14px; line-height: 1.7; margin: 0;">
+                    مسار BTEC التعليمي هو برنامج بريطاني معتمد دولياً يركز على التعليم المهني والتقني والتطبيقي. يهدف
+                    المسار إلى تزويد الطلاب بالمهارات العملية والمعرفة التقنية المطلوبة في سوق العمل في قطاعات مثل
+                    الهندسة، الأعمال، وتكنولوجيا المعلومات السياحة وغيرها، مما يضمن جاهزية الطالب للعمل فور التخرج أو
+                    إكمال الدراسات العليا في التخصصات المرتبطة.
+                </p>
+            </div>
+
+            <!-- Video Player 1 -->
+            <div class="video-wrapper">
+                <div class="video-header">
+                    <div class="video-header-dot" style="background:#ef4444;"></div>
+                    <div class="video-header-dot" style="background:#f59e0b;"></div>
+                    <div class="video-header-dot" style="background:#22c55e;"></div>
+                    <span class="video-title-text">
+                        <i class="fa-solid fa-circle-play" style="color:#818cf8;margin-left:6px;"></i>
+                        فيديو تعريفي — مسار BTEC
+                    </span>
+                </div>
+
+                <!-- Video Element -->
+                <video class="edu-video" src="assets/video/Btec it.mp4" preload="metadata"></video>
+
+                <!-- Controls Wrap -->
+                <div class="video-player-area">
+                    <!-- Progress -->
+                    <div class="video-prog-wrap">
+                        <div class="video-prog-track">
+                            <div class="video-prog-fill"></div>
+                            <input type="range" class="video-range" min="0" value="0" step="0.01">
+                        </div>
+                        <div class="video-time-row">
+                            <span class="v-current">0:00</span>
+                            <span class="v-duration">0:00</span>
+                        </div>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="video-controls">
+                        <div class="vc-group">
+                            <button class="vc-btn btn-rewind" title="رجوع 5 ثوانٍ">
+                                <i class="fa-solid fa-rotate-left"></i>
+                            </button>
+                            <span class="vc-label">رجوع 5ث</span>
+                        </div>
+
+                        <div class="vc-group">
+                            <button class="vc-btn play-btn btn-play">
+                                <i class="fa-solid fa-play"></i>
+                            </button>
+                            <span class="vc-label play-label">تشغيل</span>
+                        </div>
+
+                        <div class="vc-group">
+                            <button class="vc-btn btn-stop" title="إيقاف">
+                                <i class="fa-solid fa-stop"></i>
+                            </button>
+                            <span class="vc-label">إيقاف</span>
+                        </div>
+
+                        <div class="vc-group">
+                            <button class="vc-btn btn-forward" title="تقديم 5 ثوانٍ">
+                                <i class="fa-solid fa-rotate-right"></i>
+                            </button>
+                            <span class="vc-label">تقديم 5ث</span>
+                        </div>
+                        <div class="vc-group">
+                            <button class="vc-btn btn-fullscreen" title="ملء الشاشة">
+                                <i class="fa-solid fa-expand"></i>
+                            </button>
+                            <span class="vc-label">شاشة كاملة</span>
+                        </div>
+                    </div>
+                </div><!-- end videoPlayerArea -->
+            </div><!-- end video-wrapper -->
+
+            <!-- Video Player 2 -->
+            <div class="video-wrapper">
+                <div class="video-header">
+                    <div class="video-header-dot" style="background:#ef4444;"></div>
+                    <div class="video-header-dot" style="background:#f59e0b;"></div>
+                    <div class="video-header-dot" style="background:#22c55e;"></div>
+                    <span class="video-title-text">
+                        <i class="fa-solid fa-circle-play" style="color:#818cf8;margin-left:6px;"></i>
+                        مقطع توضيحي إضافي
+                    </span>
+                </div>
+
+                <!-- Video Element -->
+                <video class="edu-video" src="assets/video/my_video.mp4" preload="metadata"></video>
+
+                <!-- Controls Wrap -->
+                <div class="video-player-area">
+                    <!-- Progress -->
+                    <div class="video-prog-wrap">
+                        <div class="video-prog-track">
+                            <div class="video-prog-fill"></div>
+                            <input type="range" class="video-range" min="0" value="0" step="0.01">
+                        </div>
+                        <div class="video-time-row">
+                            <span class="v-current">0:00</span>
+                            <span class="v-duration">0:00</span>
+                        </div>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="video-controls">
+                        <div class="vc-group">
+                            <button class="vc-btn btn-rewind" title="رجوع 5 ثوانٍ">
+                                <i class="fa-solid fa-rotate-left"></i>
+                            </button>
+                            <span class="vc-label">رجوع 5ث</span>
+                        </div>
+
+                        <div class="vc-group">
+                            <button class="vc-btn play-btn btn-play">
+                                <i class="fa-solid fa-play"></i>
+                            </button>
+                            <span class="vc-label play-label">تشغيل</span>
+                        </div>
+
+                        <div class="vc-group">
+                            <button class="vc-btn btn-stop" title="إيقاف">
+                                <i class="fa-solid fa-stop"></i>
+                            </button>
+                            <span class="vc-label">إيقاف</span>
+                        </div>
+
+                        <div class="vc-group">
+                            <button class="vc-btn btn-forward" title="تقديم 5 ثوانٍ">
+                                <i class="fa-solid fa-rotate-right"></i>
+                            </button>
+                            <span class="vc-label">تقديم 5ث</span>
+                        </div>
+                        <div class="vc-group">
+                            <button class="vc-btn btn-fullscreen" title="ملء الشاشة">
+                                <i class="fa-solid fa-expand"></i>
+                            </button>
+                            <span class="vc-label">شاشة كاملة</span>
+                        </div>
+                    </div>
+                </div><!-- end videoPlayerArea -->
+            </div><!-- end video-wrapper -->
+
+            <!-- Future Outlook — BTEC -->
+            <div class="future-section">
+                <div class="future-title">
+                    <i class="fa-solid fa-binoculars" style="color:#4f46e5;"></i>
+                    نظرة إلى المستقبل — مسار BTEC
+                </div>
+                <div class="future-items">
+                    <div class="future-item">
+                        <div class="future-icon"><i class="fa-solid fa-file-pen"></i></div>
+                        <div>
+                            <div class="future-item-title">الواجبات</div>
+                            <div class="future-item-desc">سنضيف واجبات تفاعلية ومهام تقييمية تُمكّن الطلاب من تطبيق ما
+                                تعلموه بشكل عملي.</div>
+                        </div>
+                    </div>
+                    <div class="future-item">
+                        <div class="future-icon"><i class="fa-solid fa-lightbulb"></i></div>
+                        <div>
+                            <div class="future-item-title">الحلول</div>
+                            <div class="future-item-desc">سنضيف حلول نموذجية مفصّلة ومراجعات شاملة لمساعدة الطلاب على
+                                الفهم العميق.</div>
+                        </div>
+                    </div>
+                    <div class="future-item">
+                        <div class="future-icon"><i class="fa-solid fa-dumbbell"></i></div>
+                        <div>
+                            <div class="future-item-title">التدريب</div>
+                            <div class="future-item-desc">سنضيف تدريبات عملية واختبارات تحضيرية متنوعة لإعداد الطلاب
+                                لسوق العمل.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- end pathBtec -->
+
+        <!-- ===== ACADEMIC PATH ===== -->
+        <div class="path-content" id="pathAcademic">
+
+            <!-- Path Introduction -->
+            <div
+                style="background: white; border-radius: 16px; padding: 24px; border: 1px solid #e0e7ff; margin-bottom: 24px; box-shadow: 0 4px 12px rgba(79,70,229,0.05); border-right: 4px solid #f59e0b;">
+                <h3
+                    style="color: #1a2942; font-size: 18px; margin: 0 0 10px 0; display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-university" style="color: #f59e0b;"></i> تعريف بالمسار الأكاديمي
+                </h3>
+                <p style="color: #64748b; font-size: 14px; line-height: 1.7; margin: 0;">
+                    المسار الأكاديمي الشامل هو المسار التقليدي الذي يغطي التخصصات العلمية والأدبية، ويركز على بناء أسس
+                    معرفية نظرية وعلمية واسعة تُهيئ الطالب لامتحان الثانوية العامة والمرحلة الجامعية في مختلف التخصصات.
+                </p>
+            </div>
+
+            <!-- Future Outlook — Academic -->
+            <div class="future-section" style="margin-bottom: 24px;">
+                <div class="future-title">
+                    <i class="fa-solid fa-binoculars" style="color:#4f46e5;"></i>
+                    نظرة إلى المستقبل — المسار الأكاديمي
+                </div>
+                <div class="academic-soon">
+                    <div class="academic-soon-icon">🏗️</div>
+                    <div class="academic-soon-title">قيد التطوير</div>
+                    <div class="academic-soon-text">يتم تطويره قريبا...</div>
+                </div>
+            </div>
+        </div><!-- end pathAcademic -->
+
+    </div><!-- end main-container -->
+
+    <!-- Registration Modal -->
+    <div class="modal-overlay" id="registerModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">تسجيل حساب جديد</h3>
+                <i class="fa-solid fa-xmark modal-close" id="closeModalBtn"></i>
+            </div>
+            <div class="modal-step active" id="step1">
+                <div class="input-group"><label>الاسم الشخصي</label><input type="text" placeholder="أدخل اسمك الكريم"
+                        class="form-input" id="userNameInput"></div>
+                <div class="input-group"><label>البريد الإلكتروني</label><input type="email"
+                        placeholder="example@email.com" class="form-input" style="text-align:left;direction:ltr;"></div>
+                <div class="input-group"><label>كلمة المرور</label><input type="password" placeholder="********"
+                        class="form-input" style="text-align:left;direction:ltr;"></div>
+                <div class="input-group">
+                    <label>الصورة الشخصية (اختياري)</label>
+                    <label class="file-upload-btn">
+                        <input type="file" id="profileImageInput" accept="image/*">
+                        <i class="fa-solid fa-cloud-arrow-up"></i><span id="fileNameDisplay">اختر صورة من جهازك</span>
+                    </label>
+                </div>
+                <button class="btn-primary" id="btnNextStep"><span>إنشاء الحساب ومتابعة</span> <i
+                        class="fa-solid fa-arrow-left" style="margin-right:8px;"></i></button>
+            </div>
+            <div class="modal-step" id="step2">
+                <p style="color:#64748b;margin-bottom:20px;font-size:14px;line-height:1.6;">تم التسجيل بنجاح!</p>
+                <label style="font-weight:600;font-size:14px;display:block;margin-bottom:10px;color:#1a2942;">أيقونات
+                    الأفاتار:</label>
+                <div class="avatar-grid">
+                    <div class="avatar-item">👨‍💻</div>
+                    <div class="avatar-item">👩‍🏫</div>
+                    <div class="avatar-item">🌟</div>
+                    <div class="avatar-item">🎓</div>
+                    <div class="avatar-item">🚀</div>
+                    <div class="avatar-item">💡</div>
+                    <div class="avatar-item">🎨</div>
+                    <div class="avatar-item">📚</div>
+                </div>
+                <label
+                    style="font-weight:600;font-size:14px;display:block;margin-bottom:10px;margin-top:20px;color:#1a2942;">خلفيات
+                    الملف:</label>
+                <div class="bg-grid">
+                    <div class="bg-item" style="background:linear-gradient(120deg,#a1c4fd 0%,#c2e9fb 100%);"></div>
+                    <div class="bg-item" style="background:linear-gradient(to right,#ffecd2 0%,#fcb69f 100%);"></div>
+                    <div class="bg-item" style="background:linear-gradient(120deg,#d4fc79 0%,#96e6a1 100%);"></div>
+                    <div class="bg-item" style="background:#1a2942;"></div>
+                </div>
+                <div style="display:flex;gap:12px;margin-top:30px;">
+                    <button class="btn-secondary" id="btnSkip" style="flex:1;">تخطي للآن</button>
+                    <button class="btn-primary" id="btnSave" style="flex:1;margin-top:0;"><span>حفظ</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/data.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script>
+        // ===== Path Tabs =====
+        function switchPath(path) {
+            ['Btec', 'Academic'].forEach(p => {
+                document.getElementById('path' + p).classList.remove('active');
+                document.getElementById('tab' + p).classList.remove('active');
+            });
+            document.getElementById('path' + (path === 'btec' ? 'Btec' : 'Academic')).classList.add('active');
+            document.getElementById('tab' + (path === 'btec' ? 'Btec' : 'Academic')).classList.add('active');
+        }
+
+        // ===== Multiple Video Players Logic =====
+        function fmtTime(sec) {
+            if (isNaN(sec)) return "0:00";
+            let m = Math.floor(sec / 60);
+            let s = Math.floor(sec % 60);
+            return m + ':' + (s < 10 ? '0' : '') + s;
+        }
+
+        document.querySelectorAll('.video-wrapper').forEach(wrapper => {
+            const vid = wrapper.querySelector('.edu-video');
+            const playBtn = wrapper.querySelector('.btn-play');
+            const playIcon = playBtn.querySelector('i');
+            const playLabel = wrapper.querySelector('.play-label');
+            const progFill = wrapper.querySelector('.video-prog-fill');
+            const vRange = wrapper.querySelector('.video-range');
+            const vCurrent = wrapper.querySelector('.v-current');
+            const vDuration = wrapper.querySelector('.v-duration');
+            const rewindBtn = wrapper.querySelector('.btn-rewind');
+            const stopBtn = wrapper.querySelector('.btn-stop');
+            const forwardBtn = wrapper.querySelector('.btn-forward');
+            const fullBtn = wrapper.querySelector('.btn-fullscreen');
+
+            if (!vid) return;
+
+            vid.addEventListener('loadedmetadata', () => {
+                vDuration.innerText = fmtTime(vid.duration);
+                vRange.max = vid.duration;
+            });
+
+            vid.addEventListener('timeupdate', () => {
+                vCurrent.innerText = fmtTime(vid.currentTime);
+                vRange.value = vid.currentTime;
+                if(vid.duration) {
+                    let pct = (vid.currentTime / vid.duration) * 100;
+                    progFill.style.width = pct + '%';
+                }
+            });
+
+            vRange.addEventListener('input', () => {
+                vid.currentTime = vRange.value;
+            });
+
+            vid.addEventListener('ended', () => {
+                playIcon.className = 'fa-solid fa-rotate-right';
+                playLabel.innerText = 'إعادة';
+            });
+
+            playBtn.addEventListener('click', () => {
+                if (vid.paused) {
+                    // Pause other videos
+                    document.querySelectorAll('.edu-video').forEach(otherVid => {
+                        if(otherVid !== vid && !otherVid.paused) {
+                            otherVid.pause();
+                            const otherWrapper = otherVid.closest('.video-wrapper');
+                            otherWrapper.querySelector('.btn-play i').className = 'fa-solid fa-play';
+                            otherWrapper.querySelector('.play-label').innerText = 'تشغيل';
+                        }
+                    });
+                    
+                    vid.play();
+                    playIcon.className = 'fa-solid fa-pause';
+                    playLabel.innerText = 'إيقاف مؤقت';
+                } else {
+                    vid.pause();
+                    playIcon.className = 'fa-solid fa-play';
+                    playLabel.innerText = 'تشغيل';
+                }
+            });
+
+            stopBtn.addEventListener('click', () => {
+                vid.pause();
+                vid.currentTime = 0;
+                playIcon.className = 'fa-solid fa-play';
+                playLabel.innerText = 'تشغيل';
+            });
+
+            rewindBtn.addEventListener('click', () => {
+                vid.currentTime = Math.max(0, vid.currentTime - 5);
+            });
+
+            forwardBtn.addEventListener('click', () => {
+                vid.currentTime = Math.min(vid.duration || 0, vid.currentTime + 5);
+            });
+
+            if (fullBtn) {
+                fullBtn.addEventListener('click', () => {
+                    if (vid.requestFullscreen) {
+                        vid.requestFullscreen();
+                    } else if (vid.webkitRequestFullscreen) {
+                        vid.webkitRequestFullscreen();
+                    } else if (vid.msRequestFullscreen) {
+                        vid.msRequestFullscreen();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
